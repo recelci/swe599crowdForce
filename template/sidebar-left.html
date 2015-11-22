@@ -1,0 +1,42 @@
+<div class="sidebar-inner c-overflow">    
+    <div class="profile-menu">
+        <a href="" toggle-submenu>
+            <div class="profile-pic">
+                <img src="img/profile-pics/1.jpg" alt="">
+            </div>
+
+            <div class="profile-info">
+                Malinda Hollaway
+
+                <i class="zmdi zmdi-caret-down"></i>
+            </div>
+        </a>
+
+        <ul class="main-menu">
+            <li>
+                <a data-ui-sref="pages.profile.profile-about" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-account"></i> View Profile</a>
+            </li>
+
+            <li>
+                <a href="" ng-click="mactrl.logout()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
+            </li>
+        </ul>
+    </div>
+
+    <ul class="main-menu">
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Home</a>
+        </li>
+
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="pages.poll" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-widgets"></i> Polls</a>
+
+            <!--<ul>-->
+                <!--<li><a data-ui-sref-active="active" data-ui-sref="pages.polls.polls-available" data-ng-click="mactrl.sidebarStat($event)">Available Polls</a></li>-->
+                <!--<li><a data-ui-sref-active="active" data-ui-sref="pages.polls.polls-results" data-ng-click="mactrl.sidebarStat($event)">View Polls</a></li>-->
+                <!--<li><a data-ui-sref-active="active" data-ui-sref="pages.polls.polls-created" data-ng-click="mactrl.sidebarStat($event)">My Polls</a></li>-->
+            <!--</ul>-->
+        </li>
+
+    </ul>
+</div>
