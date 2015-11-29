@@ -1,204 +1,104 @@
 <div class="pmb-block">
     <div class="pmbb-header">
-        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Summary</h2>
-
-        <ul class="actions" data-ng-if="pctrl.editSummary === 0">
-            <li class="dropdown" dropdown>
-                <a href="" dropdown-toggle>
-                    <i class="zmdi zmdi-more-vert"></i>
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a data-ng-click="pctrl.editSummary = 1" href="">Edit</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Poll Details</h2>
     </div>
-    <div class="pmbb-body p-l-30">
-        <div class="pmbb-view" data-ng-if="pctrl.editSummary === 0">
-            {{ pctrl.profileSummary }}
-        </div>
-
-        <form data-ng-submit="pctrl.submit('profileSummary', 'Profile Summary')" class="pmbb-edit" data-ng-if="pctrl.editSummary === 1">
+    <div class="pmbb-body">
+        <div class="form-group fg-float">
             <div class="fg-line">
-                <textarea data-ng-model="pctrl.profileSummary" class="form-control" rows="5" placeholder="Summary...">Sed eu est vulputate, fringilla ligula ac, maximus arcu. Donec sed felis vel magna mattis ornare ut non turpis. Sed id arcu elit. Sed nec sagittis tortor. Mauris ante urna, ornare sit amet mollis eu, aliquet ac ligula. Nullam dolor metus, suscipit ac imperdiet nec, consectetur sed ex. Sed cursus porttitor leo.</textarea>
+                <input type="text" class="input-lg form-control fg-input" ng-model="$root.model.poll.title">
             </div>
-            <div class="m-t-10">
-                <button class="btn btn-primary btn-sm" type="submit">Save</button>
-                <button class="btn btn-link btn-sm" data-ng-click="pctrl.editSummary = 0" >Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="pmb-block">
-    <div class="pmbb-header">
-        <h2><i class="zmdi zmdi-person m-r-5"></i> Basic Information</h2>
-
-        <ul class="actions" data-ng-if="pctrl.editInfo === 0">
-            <li class="dropdown" dropdown>
-                <a href="" dropdown-toggle>
-                    <i class="zmdi zmdi-more-vert"></i>
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a data-ng-click="pctrl.editInfo = 1" href="">Edit</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="pmbb-body p-l-30">
-        <div class="pmbb-view" data-ng-if="pctrl.editInfo === 0">
-            <dl class="dl-horizontal">
-                <dt>Full Name</dt>
-                <dd>{{ pctrl.fullName }}</dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt>Gender</dt>
-                <dd>{{ pctrl.gender }}</dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt>Birthday</dt>
-                <dd>{{ pctrl.birthDay }}</dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt>Martial Status</dt>
-                <dd>{{ pctrl.martialStatus }}</dd>
-            </dl>
+            <label class="fg-label">Title</label>
         </div>
 
-        <form data-ng-submit="pctrl.submit('profileInfo', 'Profile Information')" class="pmbb-edit" data-ng-if="pctrl.editInfo === 1">
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Full Name</dt>
-                <dd>
-                    <div class="fg-line">
-                        <input data-ng-model="pctrl.fullName" type="text" class="form-control" value="{{ pctrl.fullName }}" placeholder="eg. Mallinda Hollaway">
-                    </div>
-
-                </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Gender</dt>
-                <dd>
-                    <div class="fg-line">
-                        <select class="form-control">
-                            <option>Female</option>
-                            <option>Male</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Birthday</dt>
-                <dd>
-                    <div class="dtp-container dropdown fg-line">
-                        <input type='text' class="form-control" data-dt-picker="DD/MM/YYYY" dropdown-toggle placeholder="eg. 23/06/1988">
-                    </div>
-                </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Martial Status</dt>
-                <dd>
-                    <div class="fg-line">
-                        <select class="form-control">
-                            <option>Single</option>
-                            <option>Married</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                </dd>
-            </dl>
-
-            <div class="m-t-30">
-                <button class="btn btn-primary btn-sm" type="submit">Save</button>
-                <button class="btn btn-link btn-sm" data-ng-click="pctrl.editInfo = 0" >Cancel</button>
+        <div class="form-group fg-float">
+            <div class="fg-line">
+                <input type="text" class="input-lg form-control fg-input" ng-model="$root.model.poll.description">
             </div>
-        </form>
+            <label class="fg-label">Description</label>
+        </div>
     </div>
 </div>
 
 
 <div class="pmb-block">
+
     <div class="pmbb-header">
-        <h2><i class="zmdi zmdi-phone m-r-5"></i> Contact Information</h2>
+        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Current Questions</h2>
 
-        <ul class="actions" data-ng-if="pctrl.editContact === 0">
-            <li class="dropdown" dropdown>
-                <a href="" dropdown-toggle>
-                    <i class="zmdi zmdi-more-vert"></i>
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a data-ng-click="pctrl.editContact = 1" href="">Edit</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
     </div>
-    <div class="pmbb-body p-l-30">
-        <div class="pmbb-view" data-ng-if="pctrl.editContact === 0">
+
+    <div class="pmbb-body" ng-repeat="questions in pollQuestions">
+        <blockquote class="m-b-25">
+
             <dl class="dl-horizontal">
-                <dt>Mobile Phone</dt>
-                <dd>{{ pctrl.mobileNumber }}</dd>
+                <dt>Question Body</dt>
+                <dd>{{ questions.body }}</dd>
             </dl>
+
             <dl class="dl-horizontal">
-                <dt>Email Address</dt>
-                <dd>{{ pctrl.emailAddress }}</dd>
+                <dt>Answer Type</dt>
+                <dd>{{ questions.answerType }}</dd>
             </dl>
+
             <dl class="dl-horizontal">
-                <dt>Twitter</dt>
-                <dd>{{ pctrl.twitter }}</dd>
+                <dt>Options</dt>
+                <dd>{{ questions.option }}</dd>
             </dl>
-            <dl class="dl-horizontal">
-                <dt>Skype</dt>
-                <dd>{{ pctrl.skype }}</dd>
-            </dl>
+        </blockquote>
+    </div>
+
+</div>
+
+
+<div class="pmb-block">
+
+    <div class="pmbb-header">
+        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Add Question</h2>
+
+    </div>
+
+    <div class="pmbb-body">
+        <div class="form-group fg-float">
+            <div class="fg-line">
+                <input type="text" class="input-lg form-control fg-input" ng-model="$root.model.pollQuestion.body">
+            </div>
+            <label class="fg-label">Question Body</label>
         </div>
 
-        <form data-ng-submit="pctrl.submit('profileContact', 'Profile Contact Information')" class="pmbb-edit" data-ng-if="pctrl.editContact === 1">
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Mobile Phone</dt>
-                <dd>
-                    <div class="fg-line">
-                        <input data-ng-model="pctrl.mobileNumber" type="text" class="form-control" placeholder="eg. 00971 12345678 9">
-                    </div>
-                </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Email Address</dt>
-                <dd>
-                    <div class="fg-line">
-                        <input data-ng-model="pctrl.emailAddress" type="email" class="form-control" placeholder="eg. malinda.h@gmail.com">
-                    </div>
-                </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Twitter</dt>
-                <dd>
-                    <div class="fg-line">
-                        <input data-ng-model="pctrl.twitter" type="text" class="form-control" placeholder="eg. @malinda">
-                    </div>
-                </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Skype</dt>
-                <dd>
-                    <div class="fg-line">
-                        <input data-ng-model="pctrl.skype" type="text" class="form-control" placeholder="eg. malinda.hollaway">
-                    </div>
-                </dd>
-            </dl>
+        <div class="form-group">
+            <div class="fg-line">
+                <div class="select">
 
-            <div class="m-t-30">
-                <button class="btn btn-primary btn-sm" type="submit">Save</button>
-                <button class="btn btn-link btn-sm" data-ng-click="pctrl.editContact = 0" >Cancel</button>
+                    <label class="fg-label">Answer Type</label>
+                    <select class="form-control" ng-model="$root.model.pollQuestion.answerType">
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                        <option>Option 3</option>
+                        <option>Option 4</option>
+                        <option>Option 5</option>
+                    </select>
+                </div>
             </div>
-        </form>
+        </div>
+
+        <div class="form-group fg-float">
+            <div class="fg-line">
+                <input type="text" class="input-lg form-control fg-input"
+                       ng-model="$root.model.pollQuestion.option">
+            </div>
+            <label class="fg-label">Options</label>
+        </div>
+    </div>
+
+    <div class="pmbb-body">
+        <button class="btn btn-default" ng-click="addQuestion()"> Add</button>
+    </div>
+
+
+</div>
+
+<div class="pmb-block">
+    <div class="pmbb-body">
+        <button class="btn btn-default" ng-click="submit()"> Submit</button>
     </div>
 </div>
