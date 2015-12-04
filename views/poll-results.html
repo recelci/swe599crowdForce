@@ -1,0 +1,66 @@
+<div class="pmb-block">
+    <div class="pmbb-header">
+        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Poll Details</h2>
+    </div>
+
+    <div class="pmbb-body">
+
+        <div class="form-group">
+            <div class="fg-line">
+                <blockquote class="m-b-25">
+
+                    <dl class="dl-horizontal">
+                        <dt>Title</dt>
+                        <dd>{{ $root.model.poll.title }}</dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Description</dt>
+                        <dd>{{ $root.model.poll.description }}</dd>
+                    </dl>
+
+                </blockquote>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="pmb-block">
+
+
+    <div class="pmbb-header">
+        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Questions</h2>
+
+    </div>
+
+    <div class="pmbb-body" ng-repeat="questions in $root.model.poll.question">
+        <div class="form-group">
+            <div class="fg-line">
+                <blockquote class="m-b-25">
+
+                    <dl class="dl-horizontal">
+                        <dt>Question Body</dt>
+                        <dd>{{ questions.body }}</dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Options</dt>
+                        <dd ng-repeat="options in questions.option">{{ options.definition }}</dd>
+                    </dl>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="pmb-block">
+
+    <div class="pmbb-header">
+        <h2>
+            <button class="btn btn-primary btn-lg" ng-click="submit()"> Submit</button>
+        </h2>
+    </div>
+
+</div>

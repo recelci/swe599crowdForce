@@ -1,7 +1,54 @@
 materialAdmin
+
 // =========================================================================
-// Base controller for common functions
+// Initialize constants and variables.
 // =========================================================================
+
+    .constant('USER', {"USER_ROLES": ["Student", "Faculty Member", "Other"]})
+
+    .run(["$rootScope", function ($rootScope) {
+        $rootScope.model = {
+            user: {
+                email: "",
+                userName: "",
+                userLastName: "",
+                photo: "",
+                role: "",
+                data: {
+                    createdPolls: [],
+                    participatedPolls: []
+                },
+                isAdmin: false
+            },
+
+            poll: {
+                title: "",
+                description: "",
+                question: [],
+                participant: [],
+                owner: "",
+                createDate: "",
+                endDate: "",
+                updateDate: "",
+                authRole: []
+            },
+
+            pollQuestion: {
+                body: "",
+                answerType: "",
+                option: []
+            },
+
+            pollQuestionOption: {
+                definition: "",
+                answer: ""
+            }
+        };
+    }])
+
+    // =========================================================================
+    // Base controller for common functions
+    // =========================================================================
 
     .controller('materialadminCtrl', function ($timeout, $state, growlService, $window, fireFactory, $rootScope) {
         //Welcome Message
@@ -307,41 +354,6 @@ materialAdmin
     //=================================================
     // LOGIN / REGISTER
     //=================================================
-    .constant('USER', {"USER_ROLES": ["Student", "Faculty Member", "Other"]})
-
-    .run(["$rootScope", function ($rootScope) {
-        $rootScope.model = {
-            user: {
-                email: '',
-                userName: '',
-                userLastName: '',
-                photo: '',
-                role: '',
-                data: {
-                    createdPolls: [],
-                    participatedPolls: [],
-                },
-                isAdmin: false
-            },
-            poll: {
-                title: "",
-                description: "",
-                question: [],
-                participant: [],
-                owner: "",
-                createDate: "",
-                endDate: "",
-                updateDate: "",
-                authRole: []
-            },
-
-            pollQuestion: {
-                body: "",
-                answerType: "",
-                option: []
-            }
-        };
-    }])
 
     .controller('loginCtrl', function () {
 
@@ -458,19 +470,41 @@ materialAdmin
     // POLL
     //=================================================
 
-    .controller('PollCtrl', function PollCtrl($scope, fireFactory, $rootScope, $state, pollQuestion) {
+    .controller('PollCtrl', function PollCtrl($scope, fireFactory, $rootScope, $state, pollQuestion, pollQuestionOption, currentPoll, $filter, $sce, ngTableParams) {
 
         $rootScope.model.poll.owner = $rootScope.currentUserReference.userId;
-
         $scope.pollQuestions = pollQuestion.list();
+        $scope.pollQuestionOptions = pollQuestionOption.list();
+        $scope.currentPolls = currentPoll.list();
+        $scope.pollPageState = "main";
+
+        $scope.isQuestionButtonDisabled = function () {
+
+            return ($rootScope.model.pollQuestion.body && $rootScope.model.pollQuestion.answerType && $scope.pollQuestionOptions.length > 0);
+
+        };
 
         $scope.addQuestion = function () {
 
             pollQuestion.add({
                 body: $rootScope.model.pollQuestion.body,
                 answerType: $rootScope.model.pollQuestion.answerType,
-                option: $rootScope.model.pollQuestion.option
+                option: $scope.pollQuestionOptions.slice()
             });
+
+            $rootScope.model.pollQuestion = {};
+            pollQuestionOption.clear();
+
+        };
+
+        $scope.addOption = function () {
+
+            pollQuestionOption.add({
+                definition: $rootScope.model.pollQuestionOption.definition,
+                value: ""
+            });
+
+            $rootScope.model.pollQuestionOption = {};
 
         };
 
@@ -486,12 +520,45 @@ materialAdmin
                 return;
             }
 
-            $rootScope.model.poll.question = $rootScope.model.pollQuestion;
+            $rootScope.model.poll.question = $scope.pollQuestions;
 
             var pollJSON = angular.fromJson(angular.toJson($rootScope.model.poll));
-            var fireBaseObj = fireFactory.getPollData().push(pollJSON);
+            var fireBaseObj = fireFactory.pollReference().push(pollJSON);
+
+            pollQuestion.clear();
+            pollQuestionOption.clear();
 
         };
+
+        $scope.tableSorting = new ngTableParams({
+            page: 1,            // show first page
+            count: 10,           // count per page
+            sorting: {
+                title: 'asc'     // initial sorting
+            }
+        }, {
+            total: $scope.currentPolls.length, // length of data
+            getData: function ($defer, params) {
+                // use build-in angular filter
+                var orderedData = params.sorting() ? $filter('orderBy')($scope.currentPolls, params.orderBy()) : $scope.currentPolls;
+
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+        });
+
+        $scope.viewSpecificPoll = function (pollId){
+
+            $scope.specificPoll = currentPoll.get(pollId);
+
+            $state.go("pages.poll.poll-view-specific.poll-questions");
+
+
+        };
+
+        $scope.createNewPoll = function(){
+
+            $state.go("pages.poll.poll-create-new");
+        }
 
     })
 
@@ -829,8 +896,20 @@ materialAdmin
 
 
             //POLL
-            helperFactory.getPollData = function () {
+            helperFactory.pollReference = function () {
                 return helperFactory.dataReference().child('poll');
+            };
+
+            helperFactory.specificPollReference = function (uid) {
+                return helperFactory.pollReference().child(uid);
+            };
+
+            helperFactory.getPollData = function () {
+                return $firebaseObject(helperFactory.pollReference());
+            };
+
+            helperFactory.getSpecificPollData = function (uid) {
+                return $firebaseObject(helperFactory.specificPollReference(uid));
             };
 
             return helperFactory;
@@ -851,6 +930,57 @@ materialAdmin
             return question;
         };
 
+        questionService.clear = function () {
+            question.length = 0;
+        };
+
         return questionService;
-    });
+    })
+
+    .factory('pollQuestionOption', function () {
+        var option = [];
+
+        var optionService = {};
+
+        optionService.add = function (optionObject) {
+            option.push(optionObject);
+        };
+
+        optionService.list = function () {
+            return option;
+        };
+
+        optionService.clear = function () {
+            option.length = 0;
+        };
+
+        return optionService;
+    })
+
+    .factory('currentPoll', function (fireFactory) {
+        var currentPolls = fireFactory.getPollData();
+        var currentPollsService = {};
+
+
+        currentPollsService.get = function (specificPollID) {
+            if (specificPollID) {
+
+                var specificPollData = fireFactory.getSpecificPollData(specificPollID);
+
+            }
+
+            return specificPollData;
+        };
+
+        currentPollsService.list = function () {
+            return currentPolls;
+        };
+
+        return currentPollsService;
+    })
+
+
+
+
+;
 

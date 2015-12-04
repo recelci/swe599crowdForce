@@ -66,7 +66,27 @@ materialAdmin
                 templateUrl: 'views/poll.html'
             })
 
-            .state ('pages.poll.poll-questions', {
+            .state ('pages.poll.poll-create-new', {
+                url: '/poll-create-new',
+                templateUrl: 'views/poll-create-new.html',
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load ([])
+                    }
+                }
+            })
+
+            .state ('pages.poll.poll-view-specific', {
+                url: '/poll-view-specific',
+                templateUrl: 'views/poll-view-specific.html',
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load ([])
+                    }
+                }
+            })
+
+            .state ('pages.poll.poll-view-specific.poll-questions', {
                 url: '/poll-questions',
                 templateUrl: 'views/poll-questions.html',
                 resolve: {
@@ -76,19 +96,9 @@ materialAdmin
                 }
             })
 
-            .state ('pages.poll.poll-results', {
+            .state ('pages.poll.poll-view-specific.poll-results', {
                 url: '/poll-results',
                 templateUrl: 'views/poll-results.html',
-                resolve: {
-                    loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load ([])
-                    }
-                }
-            })
-
-            .state ('pages.poll.poll-create-new', {
-                url: '/poll-create-new',
-                templateUrl: 'views/poll-create-new.html',
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
                         return $ocLazyLoad.load ([])
