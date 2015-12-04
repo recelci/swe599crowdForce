@@ -12904,7 +12904,7 @@ body.login-content:before {
 }
 @media (min-width: 1200px) {
   #profile-main .pm-overview {
-    width: 300px;
+    width: 450px;
   }
 }
 @media (min-width: 768px) and (max-width: 1200px) {
@@ -12931,7 +12931,7 @@ body.login-content:before {
 }
 @media (min-width: 1200px) {
   #profile-main .pm-body {
-    padding-left: 300px;
+    padding-left: 4500px;
   }
 }
 @media (min-width: 768px) and (max-width: 1200px) {

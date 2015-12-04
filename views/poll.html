@@ -7,9 +7,9 @@
 
         <ul class="actions m-t-20 hidden-xs">
 
-                <button class="btn btn-success btn-icon-text pull-right" ng-click="createNewPoll()"><i
-                        class="zmdi zmdi-plus-box"></i> Create New Poll
-                </button>
+            <button class="btn btn-success btn-icon-text pull-right" ng-click="createNewPoll()"><i
+                    class="zmdi zmdi-plus-box"></i> Create New Poll
+            </button>
 
         </ul>
     </div>
@@ -21,10 +21,10 @@
                 <div class="table-responsive">
                     <table ng-table="PollCtrl.tableSorting" class="table table-striped table-vmiddle">
 
-                        <tr ng-repeat="(key, poll) in currentPolls">
+                            <tr ng-repeat="(pollID, poll) in currentPolls" ng-click="viewSpecificPoll(pollID)">
 
                                 <td data-title="'Title'" sortable="'title'">
-                                    <a ng-click = "viewSpecificPoll(key)">{{ poll.title }}</a>
+                                   {{ poll.title | limitTo: 25 }} {{poll.title.length > 25 ? '...' : ''}}
                                 </td>
                                 <td data-title="'Created'" sortable="'createDate'">
                                     {{ poll.createDate }}
@@ -33,8 +33,7 @@
                                     {{ poll.endDate }}
                                 </td>
 
-                        </tr>
-
+                            </tr>
                     </table>
                 </div>
             </div>

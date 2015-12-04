@@ -43,7 +43,9 @@ materialAdmin
                 definition: "",
                 answer: ""
             }
-        };
+        }
+
+        localStorage.setItem('ma-layout-status', 1);
     }])
 
     // =========================================================================
@@ -527,6 +529,9 @@ materialAdmin
 
             pollQuestion.clear();
             pollQuestionOption.clear();
+            $rootScope.model.poll = "";
+            $rootScope.model.pollQuestion = "";
+            $rootScope.model.pollQuestionOption = "";
 
         };
 
