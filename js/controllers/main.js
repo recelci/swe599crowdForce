@@ -40,8 +40,8 @@ materialAdmin
             },
 
             pollQuestionOption: {
-                definition: "",
-                answer: ""
+                body: "",
+                value: ""
             },
 
             pollAnswerType: [
@@ -524,7 +524,7 @@ materialAdmin
         $scope.addOption = function () {
 
             pollQuestionOption.add({
-                definition: $rootScope.model.pollQuestionOption.definition,
+                body: $rootScope.model.pollQuestionOption.body,
                 value: ""
             });
 

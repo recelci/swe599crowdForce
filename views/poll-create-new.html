@@ -59,7 +59,7 @@
                 <div class="form-group fg-float">
                     <div class="fg-line">
                         <input type="text" class="input-lg form-control fg-input"
-                               ng-model="$root.model.pollQuestionOption.definition">
+                               ng-model="$root.model.pollQuestionOption.body">
                     </div>
                     <label class="fg-label">New Option</label>
 
@@ -69,7 +69,7 @@
                 <div class="form-group">
                     <div class="fg-line">
                         <button class="btn btn-success btn-lg" ng-click="addOption()"
-                                ng-hide="!$root.model.pollQuestionOption.definition">
+                                ng-hide="!$root.model.pollQuestionOption.body">
                             <i class="zmdi zmdi-plus"></i></button>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                 <div class="fg-line">
                     <dl class="dl-horizontal">
                         <dt>Current Options</dt>
-                        <dd ng-repeat="options in pollQuestionOptions">{{ options.definition }}</dd>
+                        <dd ng-repeat="options in pollQuestionOptions">{{ options.body }}</dd>
                     </dl>
                 </div>
             </div>
@@ -120,7 +120,7 @@
 
                     <dl class="dl-horizontal">
                         <dt>Options</dt>
-                        <dd ng-repeat="options in questions.option">{{ options.definition }}</dd>
+                        <dd ng-repeat="options in questions.option">{{ options.body }}</dd>
                     </dl>
                 </blockquote>
             </div>
