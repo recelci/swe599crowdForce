@@ -46,12 +46,8 @@
                 <div class="select">
 
                     <label class="fg-label">Answer Type</label>
-                    <select class="form-control" ng-model="$root.model.pollQuestion.answerType">
-                        <option>Option 1</option>
-                        <option>Option 2</option>
-                        <option>Option 3</option>
-                        <option>Option 4</option>
-                        <option>Option 5</option>
+                    <select class="form-control" ng-model="$root.model.pollQuestion.answerType" tabindex="4" ng-options="types for (typeID, types) in $root.model.pollAnswerType">
+
                     </select>
                 </div>
             </div>

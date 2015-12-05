@@ -42,7 +42,19 @@ materialAdmin
             pollQuestionOption: {
                 definition: "",
                 answer: ""
-            }
+            },
+
+            pollAnswerType: [
+                'List',
+                'Float',
+                'Text',
+                'Time',
+                'Date',
+                'Currency',
+                'Percent'
+            ]
+
+
         }
 
         localStorage.setItem('ma-layout-status', 1);
@@ -488,14 +500,24 @@ materialAdmin
 
         $scope.addQuestion = function () {
 
-            pollQuestion.add({
-                body: $rootScope.model.pollQuestion.body,
-                answerType: $rootScope.model.pollQuestion.answerType,
-                option: $scope.pollQuestionOptions.slice()
-            });
 
-            $rootScope.model.pollQuestion = {};
-            pollQuestionOption.clear();
+            if (!$scope.isQuestionButtonDisabled()) {
+
+                return false;
+
+            } else {
+
+                pollQuestion.add({
+                    body: $rootScope.model.pollQuestion.body,
+                    answerType: $rootScope.model.pollQuestion.answerType,
+                    option: $scope.pollQuestionOptions.slice()
+                });
+
+                $rootScope.model.pollQuestion = {};
+                pollQuestionOption.clear();
+
+            }
+
 
         };
 
@@ -551,7 +573,7 @@ materialAdmin
             }
         });
 
-        $scope.viewSpecificPoll = function (pollId){
+        $scope.viewSpecificPoll = function (pollId) {
 
             $scope.specificPoll = currentPoll.get(pollId);
 
@@ -560,7 +582,7 @@ materialAdmin
 
         };
 
-        $scope.createNewPoll = function(){
+        $scope.createNewPoll = function () {
 
             $state.go("pages.poll.poll-create-new");
         }
@@ -983,8 +1005,6 @@ materialAdmin
 
         return currentPollsService;
     })
-
-
 
 
 ;
