@@ -44,12 +44,6 @@ materialAdmin
                 value: []
             },
 
-            pollQuestionOptionValue: {
-
-                answer: ""
-
-            },
-
             pollAnswerType: [
 
                 'Number',
@@ -549,13 +543,15 @@ materialAdmin
             $rootScope.model.poll.question = $scope.pollQuestions;
 
             var pollJSON = angular.fromJson(angular.toJson($rootScope.model.poll));
-            fireFactory.pollReference().push(pollJSON);
+            var fireBaseObj = fireFactory.pollReference().push(pollJSON);
 
             pollQuestion.clear();
             pollQuestionOption.clear();
             $rootScope.model.poll = "";
             $rootScope.model.pollQuestion = "";
             $rootScope.model.pollQuestionOption = "";
+
+            $scope.userPollCreateInteraction(fireBaseObj.key());
 
         };
 
@@ -581,6 +577,8 @@ materialAdmin
 
             $scope.specificPoll = currentPoll.get(pollId);
 
+            /*console.log(uuidService + " ");*/
+
             $state.go("pages.poll.poll-view-specific.poll-questions");
 
         };
@@ -591,22 +589,69 @@ materialAdmin
 
                 for (var j = 0, optionLength = $scope.specificPoll.question[i].option.length; j < optionLength; j++) {
 
-                    var pollJSON = angular.fromJson(angular.toJson($rootScope.model.pollQuestionOptionValue.answer[i][j]));
+                    /*console.log(i + " " + j +" "+$rootScope.model.pollQuestionOption.value[i][j]);*/
+                    var pollJSON = angular.fromJson(angular.toJson($rootScope.model.pollQuestionOption.value[i][j]));
                     fireFactory.optionValueReference($scope.specificPollId, i, j).push(pollJSON);
 
                 }
             }
 
+            $rootScope.model.pollQuestionOption.value = "";
+
+            $scope.userPollParticipateInteraction($scope.specificPollId);
 
 
-            $rootScope.model.pollQuestionOptionValue.answer = "";
+        };
+
+        $scope.userPollParticipateInteraction = function (pollId) {
+
+            if (!$rootScope.currentUserReference.currentUserData.data) {
+                $rootScope.currentUserReference.currentUserData.data = {};
+            }
+
+            if (!$rootScope.currentUserReference.currentUserData.data.participatedPolls) {
+                $rootScope.currentUserReference.currentUserData.data.participatedPolls = {};
+            }
+            $rootScope.currentUserReference.currentUserData.data.participatedPolls[pollId] = true;
+
+            $rootScope.currentUserReference.currentUserData.$save();
+
+        };
+
+        $scope.userPollCreateInteraction = function (pollId) {
+
+            if (!$rootScope.currentUserReference.currentUserData.data) {
+                $rootScope.currentUserReference.currentUserData.data = {};
+            }
+
+            if (!$rootScope.currentUserReference.currentUserData.data.createdPolls) {
+                $rootScope.currentUserReference.currentUserData.data.createdPolls = {};
+            }
+            $rootScope.currentUserReference.currentUserData.data.createdPolls[pollId] = true;
+
+            $rootScope.currentUserReference.currentUserData.$save();
 
         };
 
         $scope.createNewPoll = function () {
 
             $state.go("pages.poll.poll-create-new");
-        }
+        };
+
+
+
+        $scope.guid = function(){
+
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+
+        };
 
     })
 
