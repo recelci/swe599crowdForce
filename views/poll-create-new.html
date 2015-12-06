@@ -46,7 +46,7 @@
                 <div class="select">
 
                     <label class="fg-label">Answer Type</label>
-                    <select class="form-control" ng-model="$root.model.pollQuestion.answerType" tabindex="4" ng-options="types for (typeID, types) in $root.model.pollAnswerType">
+                    <select class="form-control" data-ng-model="$root.model.pollQuestion.answerType" tabindex="4" ng-options="types for (typeID, types) in $root.model.pollAnswerType">
 
                     </select>
                 </div>
@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-12" ng-hide="!pollQuestionOptions.length > 0">
             <div class="form-group">
                 <div class="fg-line">
                     <dl class="dl-horizontal">
@@ -86,6 +86,7 @@
                 </div>
             </div>
         </div>
+
         <br>
         <br>
         <br>

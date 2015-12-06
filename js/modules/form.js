@@ -1,21 +1,21 @@
-materialAdmin 
+materialAdmin
 
-    // =========================================================================
-    // INPUT FEILDS MODIFICATION
-    // =========================================================================
+// =========================================================================
+// INPUT FEILDS MODIFICATION
+// =========================================================================
 
-    //Add blue animated border and remove with condition when focus and blur
+//Add blue animated border and remove with condition when focus and blur
 
-    .directive('fgLine', function(){
+    .directive('fgLine', function () {
         return {
             restrict: 'C',
-            link: function(scope, element) {
-                if($('.fg-line')[0]) {
-                    $('body').on('focus', '.form-control', function(){
+            link: function (scope, element) {
+                if ($('.fg-line')[0]) {
+                    $('body').on('focus', '.form-control', function () {
                         $(this).closest('.fg-line').addClass('fg-toggled');
                     })
 
-                    $('body').on('blur', '.form-control', function(){
+                    $('body').on('blur', '.form-control', function () {
                         var p = $(this).closest('.form-group');
                         var i = p.find('.form-control').val();
 
@@ -29,76 +29,76 @@ materialAdmin
                         }
                     });
                 }
-    
+
             }
         }
-        
+
     })
 
-    
+
 
     // =========================================================================
     // AUTO SIZE TEXTAREA
     // =========================================================================
-    
-    .directive('autoSize', function(){
+
+    .directive('autoSize', function () {
         return {
             restrict: 'A',
-            link: function(scope, element){
+            link: function (scope, element) {
                 if (element[0]) {
-                   autosize(element);
+                    autosize(element);
                 }
             }
         }
     })
-    
+
 
     // =========================================================================
     // BOOTSTRAP SELECT
     // =========================================================================
 
-    .directive('selectPicker', function(){
+    .directive('selectPicker', function () {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 //if (element[0]) {
-                    element.selectpicker();
+                element.selectpicker();
                 //}
             }
         }
     })
-    
+
 
     // =========================================================================
     // INPUT MASK
     // =========================================================================
 
-    .directive('inputMask', function(){
+    .directive('inputMask', function () {
         return {
             restrict: 'A',
             scope: {
-              inputMask: '='
+                inputMask: '='
             },
-            link: function(scope, element){
+            link: function (scope, element) {
                 element.mask(scope.inputMask.mask);
             }
         }
     })
 
-    
+
     // =========================================================================
     // COLOR PICKER
     // =========================================================================
 
-    .directive('colordPicker', function(){
+    .directive('colordPicker', function () {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
-                $(element).each(function(){
+            link: function (scope, element, attrs) {
+                $(element).each(function () {
                     var colorOutput = $(this).closest('.cp-container').find('.cp-value');
                     $(this).farbtastic(colorOutput);
                 });
-                
+
             }
         }
     })
@@ -109,16 +109,33 @@ materialAdmin
     // PLACEHOLDER FOR IE 9 (on .form-control class)
     // =========================================================================
 
-    .directive('formControl', function(){
+    .directive('formControl', function () {
         return {
             restrict: 'C',
-            link: function(scope, element, attrs) {
-                if(angular.element('html').hasClass('ie9')) {
+            link: function (scope, element, attrs) {
+                if (angular.element('html').hasClass('ie9')) {
                     $('input, textarea').placeholder({
                         customClass: 'ie9-placeholder'
                     });
                 }
             }
-            
+
         }
     })
+
+    .directive ('pollQuestionOptionList', function pollQuestionOptionList () {
+        return {
+            restrict: 'E',
+            scope: {
+
+                optionType: "=",
+                optionBody: "=",
+                answerValue: "=specificAnswerValue",
+                questionId: "=",
+                optionId: "="
+
+            },
+            templateUrl: "template/poll-question-option-list-template.html"
+
+        }
+    });

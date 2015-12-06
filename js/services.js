@@ -1,13 +1,13 @@
 materialAdmin
 
-    // =========================================================================
-    // Header Messages and Notifications list Data
-    // =========================================================================
+// =========================================================================
+// Header Messages and Notifications list Data
+// =========================================================================
 
-    .service('messageService', ['$resource', function($resource){
-        this.getMessage = function(img, user, text) {
+    .service('messageService', ['$resource', function ($resource) {
+        this.getMessage = function (img, user, text) {
             var gmList = $resource("data/messages-notifications.json");
-            
+
             return gmList.get({
                 img: img,
                 user: user,
@@ -15,33 +15,33 @@ materialAdmin
             });
         }
     }])
-    
+
 
     // =========================================================================
     // Best Selling Widget Data (Home Page)
     // =========================================================================
 
-    .service('bestsellingService', ['$resource', function($resource){
-        this.getBestselling = function(img, name, range) {
+    .service('bestsellingService', ['$resource', function ($resource) {
+        this.getBestselling = function (img, name, range) {
             var gbList = $resource("data/best-selling.json");
-            
+
             return gbList.get({
                 img: img,
                 name: name,
-                range: range,
+                range: range
             });
         }
     }])
 
-    
+
     // =========================================================================
     // Todo List Widget Data
     // =========================================================================
 
-    .service('todoService', ['$resource', function($resource){
-        this.getTodo = function(todo) {
+    .service('todoService', ['$resource', function ($resource) {
+        this.getTodo = function (todo) {
             var todoList = $resource("data/todo.json");
-            
+
             return todoList.get({
                 todo: todo
             });
@@ -52,11 +52,11 @@ materialAdmin
     // =========================================================================
     // Recent Items Widget Data
     // =========================================================================
-    
-    .service('recentitemService', ['$resource', function($resource){
-        this.getRecentitem = function(id, name, price) {
+
+    .service('recentitemService', ['$resource', function ($resource) {
+        this.getRecentitem = function (id, name, price) {
             var recentitemList = $resource("data/recent-items.json");
-            
+
             return recentitemList.get ({
                 id: id,
                 name: name,
@@ -69,11 +69,11 @@ materialAdmin
     // =========================================================================
     // Recent Posts Widget Data
     // =========================================================================
-    
-    .service('recentpostService', ['$resource', function($resource){
-        this.getRecentpost = function(img, user, text) {
+
+    .service('recentpostService', ['$resource', function ($resource) {
+        this.getRecentpost = function (img, user, text) {
             var recentpostList = $resource("data/messages-notifications.json");
-            
+
             return recentpostList.get ({
                 img: img,
                 user: user,
@@ -81,12 +81,12 @@ materialAdmin
             })
         }
     }])
-    
+
     // =========================================================================
     // Data Table
     // =========================================================================
-    
-    .service('tableService', [function(){
+
+    .service('tableService', [function () {
         this.data = [
             {
                 "id": 10238,
@@ -95,7 +95,7 @@ materialAdmin
                 "username": "MarcBarnes",
                 "contact": "(382)-122-5003"
             },
-            {   
+            {
                 "id": 10243,
                 "name": "Glen Curtis",
                 "email": "glen.curtis11@example.com",
@@ -122,7 +122,7 @@ materialAdmin
                 "email": "melinda@example.com",
                 "username": "MelindaMitchelle",
                 "contact": "(813)-716-4996"
-                
+
             },
             {
                 "id": 10239,
@@ -236,10 +236,10 @@ materialAdmin
     // =========================================================================
     // Nice Scroll - Custom Scroll bars
     // =========================================================================
-    .service('nicescrollService', function() {
+    .service('nicescrollService', function () {
         var ns = {};
-        ns.niceScroll = function(selector, color, cursorWidth) {
-            
+        ns.niceScroll = function (selector, color, cursorWidth) {
+
             $(selector).niceScroll({
                 cursorcolor: color,
                 cursorborder: 0,
@@ -249,8 +249,8 @@ materialAdmin
                 mousescrollstep: 100,
                 autohidemode: false
             });
-        }
-        
+        };
+
         return ns;
     })
 
@@ -259,12 +259,12 @@ materialAdmin
     // BOOTSTRAP GROWL
     //==============================================
 
-    .service('growlService', function(){
+    .service('growlService', function () {
         var gs = {};
-        gs.growl = function(message, type) {
+        gs.growl = function (message, type) {
             $.growl({
                 message: message
-            },{
+            }, {
                 type: type,
                 allow_dismiss: false,
                 label: 'Cancel',
@@ -275,16 +275,16 @@ materialAdmin
                 },
                 delay: 2500,
                 animate: {
-                        enter: 'animated bounceIn',
-                        exit: 'animated bounceOut'
+                    enter: 'animated bounceIn',
+                    exit: 'animated bounceOut'
                 },
                 offset: {
                     x: 20,
                     y: 85
                 }
             });
-        }
-        
+        };
+
         return gs;
     })
 
@@ -293,7 +293,7 @@ materialAdmin
     // UUID
     //==============================================
 
-    .service('uuidService', function(){
+    .service('uuidService', function () {
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
                 .toString(16)
@@ -303,3 +303,49 @@ materialAdmin
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
             s4() + '-' + s4() + s4() + s4();
     })
+
+    /*.service ('isObjectEmptyService', function (obj) {
+
+        // null and undefined are "empty"
+        if (obj == null) return true;
+
+        // Assume if it has a length property with a non-zero value
+        // that that property is correct.
+        if (obj.length > 0)    return false;
+        if (obj.length === 0)  return true;
+
+        // Otherwise, does it have any properties of its own?
+        // Note that this doesn't handle
+        // toString and valueOf enumeration bugs in IE < 9
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) return false;
+        }
+
+        return true;
+
+    })*/
+
+    .service('isObjectEmptyService', ['obj', function (obj) {
+
+        return {
+            query: function() {
+                if (obj == null) return true;
+
+                // Assume if it has a length property with a non-zero value
+                // that that property is correct.
+                if (obj.length > 0)    return false;
+                if (obj.length === 0)  return true;
+
+                // Otherwise, does it have any properties of its own?
+                // Note that this doesn't handle
+                // toString and valueOf enumeration bugs in IE < 9
+                for (var key in obj) {
+                    if (obj.hasOwnProperty(key)) return false;
+                }
+
+                return true;
+            }
+        };
+
+    }])
+;

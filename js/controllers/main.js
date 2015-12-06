@@ -41,21 +41,30 @@ materialAdmin
 
             pollQuestionOption: {
                 body: "",
-                value: ""
+                value: []
+            },
+
+            pollQuestionOptionValue: {
+
+                answer: ""
+
             },
 
             pollAnswerType: [
-                'List',
-                'Float',
+
+                'Number',
                 'Text',
                 'Time',
                 'Date',
                 'Currency',
-                'Percent'
+                'Percent',
+                'List',
+                'Radio',
+                'Multiple-Choice'
             ]
 
 
-        }
+        };
 
         localStorage.setItem('ma-layout-status', 1);
     }])
@@ -155,11 +164,11 @@ materialAdmin
         this.openSearch = function () {
             angular.element('#header').addClass('search-toggled');
             //growlService.growl('Welcome back Mallinda Hollaway', 'inverse');
-        }
+        };
 
         this.closeSearch = function () {
             angular.element('#header').removeClass('search-toggled');
-        }
+        };
 
         // Get messages and notification for header
         this.img = messageService.img;
@@ -252,8 +261,6 @@ materialAdmin
 
     })
 
-
-
     // =========================================================================
     // Best Selling Widget
     // =========================================================================
@@ -269,12 +276,12 @@ materialAdmin
 
 
     // =========================================================================
-    // Todo List Widget
+    // To do List Widget
     // =========================================================================
 
     .controller('todoCtrl', function (todoService) {
 
-        //Get Todo List Widget Data
+        //Get To do List Widget Data
         this.todo = todoService.todo;
 
         this.tdResult = todoService.getTodo(this.todo);
@@ -338,12 +345,10 @@ materialAdmin
         this.addressCity = "Dubai Silicon Oasis, Dubai";
         this.addressCountry = "United Arab Emirates";
 
-
         //Edit
         this.editSummary = 0;
         this.editInfo = 0;
         this.editContact = 0;
-
 
         this.submit = function (item, message) {
             if (item === 'profileSummary') {
@@ -362,8 +367,6 @@ materialAdmin
         }
 
     })
-
-
 
     //=================================================
     // LOGIN / REGISTER
@@ -490,7 +493,6 @@ materialAdmin
         $scope.pollQuestions = pollQuestion.list();
         $scope.pollQuestionOptions = pollQuestionOption.list();
         $scope.currentPolls = currentPoll.list();
-        $scope.pollPageState = "main";
 
         $scope.isQuestionButtonDisabled = function () {
 
@@ -547,7 +549,7 @@ materialAdmin
             $rootScope.model.poll.question = $scope.pollQuestions;
 
             var pollJSON = angular.fromJson(angular.toJson($rootScope.model.poll));
-            var fireBaseObj = fireFactory.pollReference().push(pollJSON);
+            fireFactory.pollReference().push(pollJSON);
 
             pollQuestion.clear();
             pollQuestionOption.clear();
@@ -575,10 +577,29 @@ materialAdmin
 
         $scope.viewSpecificPoll = function (pollId) {
 
+            $scope.specificPollId = pollId;
+
             $scope.specificPoll = currentPoll.get(pollId);
 
             $state.go("pages.poll.poll-view-specific.poll-questions");
 
+        };
+
+        $scope.submitAnswerForSpecificPoll = function () {
+
+            for (var i = 0, questionLength = $scope.specificPoll.question.length; i < questionLength; i++) {
+
+                for (var j = 0, optionLength = $scope.specificPoll.question[i].option.length; j < optionLength; j++) {
+
+                    var pollJSON = angular.fromJson(angular.toJson($rootScope.model.pollQuestionOptionValue.answer[i][j]));
+                    fireFactory.optionValueReference($scope.specificPollId, i, j).push(pollJSON);
+
+                }
+            }
+
+
+
+            $rootScope.model.pollQuestionOptionValue.answer = "";
 
         };
 
@@ -595,7 +616,7 @@ materialAdmin
 
     .controller('calendarCtrl', function ($modal) {
 
-        //Create and add Action button with dropdown in Calendar header. 
+        //Create and add Action button with dropdown in Calendar header.
         this.month = 'month';
 
         this.actionMenu = '<ul class="actions actions-alt" id="fc-actions">' +
@@ -620,7 +641,6 @@ materialAdmin
             '</ul>' +
             '</div>' +
             '</li>';
-
 
         //Open new event modal on selecting a day
         this.onSelect = function (argStart, argEnd) {
@@ -660,8 +680,8 @@ materialAdmin
             'bgm-orange',
             'bgm-purple',
             'bgm-gray',
-            'bgm-black',
-        ]
+            'bgm-black'
+        ];
 
         //Select Tag
         $scope.currentTag = '';
@@ -669,7 +689,7 @@ materialAdmin
         $scope.onTagClick = function (tag, $index) {
             $scope.activeState = $index;
             $scope.activeTagColor = tag;
-        }
+        };
 
         //Add new event
         $scope.addEvent = function () {
@@ -689,9 +709,9 @@ materialAdmin
                 $scope.calendarData.eventName = '';
                 $modalInstance.close();
             }
-        }
+        };
 
-        //Dismiss 
+        //Dismiss
         $scope.eventDismiss = function () {
             $modalInstance.dismiss();
         }
@@ -720,7 +740,6 @@ materialAdmin
         this.color4 = '#FFC107';
     })
 
-
     // =========================================================================
     // PHOTO GALLERY
     // =========================================================================
@@ -736,7 +755,7 @@ materialAdmin
             {value: 3, column: 4},
             {value: 4, column: 3},
             {value: 1, column: 12},
-        ]
+        ];
 
         //Change grid
         this.photoGrid = function (size) {
@@ -745,7 +764,6 @@ materialAdmin
         }
 
     })
-
 
     // =========================================================================
     // ANIMATIONS DEMO
@@ -762,51 +780,51 @@ materialAdmin
             {animation: 'swing', target: 'attentionSeeker'},
             {animation: 'tada', target: 'attentionSeeker'},
             {animation: 'wobble', target: 'attentionSeeker'}
-        ]
+        ];
         this.flippers = [
             {animation: 'flip', target: 'flippers'},
             {animation: 'flipInX', target: 'flippers'},
             {animation: 'flipInY', target: 'flippers'},
             {animation: 'flipOutX', target: 'flippers'},
             {animation: 'flipOutY', target: 'flippers'}
-        ]
+        ];
         this.lightSpeed = [
             {animation: 'lightSpeedIn', target: 'lightSpeed'},
             {animation: 'lightSpeedOut', target: 'lightSpeed'}
-        ]
+        ];
         this.special = [
             {animation: 'hinge', target: 'special'},
             {animation: 'rollIn', target: 'special'},
             {animation: 'rollOut', target: 'special'}
-        ]
+        ];
         this.bouncingEntrance = [
             {animation: 'bounceIn', target: 'bouncingEntrance'},
             {animation: 'bounceInDown', target: 'bouncingEntrance'},
             {animation: 'bounceInLeft', target: 'bouncingEntrance'},
             {animation: 'bounceInRight', target: 'bouncingEntrance'},
             {animation: 'bounceInUp', target: 'bouncingEntrance'}
-        ]
+        ];
         this.bouncingExits = [
             {animation: 'bounceOut', target: 'bouncingExits'},
             {animation: 'bounceOutDown', target: 'bouncingExits'},
             {animation: 'bounceOutLeft', target: 'bouncingExits'},
             {animation: 'bounceOutRight', target: 'bouncingExits'},
             {animation: 'bounceOutUp', target: 'bouncingExits'}
-        ]
+        ];
         this.rotatingEntrances = [
             {animation: 'rotateIn', target: 'rotatingEntrances'},
             {animation: 'rotateInDownLeft', target: 'rotatingEntrances'},
             {animation: 'rotateInDownRight', target: 'rotatingEntrances'},
             {animation: 'rotateInUpLeft', target: 'rotatingEntrances'},
             {animation: 'rotateInUpRight', target: 'rotatingEntrances'}
-        ]
+        ];
         this.rotatingExits = [
             {animation: 'rotateOut', target: 'rotatingExits'},
             {animation: 'rotateOutDownLeft', target: 'rotatingExits'},
             {animation: 'rotateOutDownRight', target: 'rotatingExits'},
             {animation: 'rotateOutUpLeft', target: 'rotatingExits'},
             {animation: 'rotateOutUpRight', target: 'rotatingExits'}
-        ]
+        ];
         this.fadeingEntrances = [
             {animation: 'fadeIn', target: 'fadeingEntrances'},
             {animation: 'fadeInDown', target: 'fadeingEntrances'},
@@ -817,7 +835,7 @@ materialAdmin
             {animation: 'fadeInRightBig', target: 'fadeingEntrances'},
             {animation: 'fadeInUp', target: 'fadeingEntrances'},
             {animation: 'fadeInBig', target: 'fadeingEntrances'}
-        ]
+        ];
         this.fadeingExits = [
             {animation: 'fadeOut', target: 'fadeingExits'},
             {animation: 'fadeOutDown', target: 'fadeingExits'},
@@ -828,23 +846,23 @@ materialAdmin
             {animation: 'fadeOutRightBig', target: 'fadeingExits'},
             {animation: 'fadeOutUp', target: 'fadeingExits'},
             {animation: 'fadeOutUpBig', target: 'fadeingExits'}
-        ]
+        ];
         this.zoomEntrances = [
             {animation: 'zoomIn', target: 'zoomEntrances'},
             {animation: 'zoomInDown', target: 'zoomEntrances'},
             {animation: 'zoomInLeft', target: 'zoomEntrances'},
             {animation: 'zoomInRight', target: 'zoomEntrances'},
             {animation: 'zoomInUp', target: 'zoomEntrances'}
-        ]
+        ];
         this.zoomExits = [
             {animation: 'zoomOut', target: 'zoomExits'},
             {animation: 'zoomOutDown', target: 'zoomExits'},
             {animation: 'zoomOutLeft', target: 'zoomExits'},
             {animation: 'zoomOutRight', target: 'zoomExits'},
             {animation: 'zoomOutUp', target: 'zoomExits'}
-        ]
+        ];
 
-        //Animate    
+        //Animate
         this.ca = '';
 
         this.setAnimation = function (animation, target) {
@@ -876,7 +894,7 @@ materialAdmin
 
     .factory('fireFactory', ['$firebaseObject', '$window',
 
-        function fireFactory($firebaseObject, $window) {
+        function ($firebaseObject, $window) {
 
             //COMMON
             var helperFactory = {};
@@ -931,6 +949,10 @@ materialAdmin
                 return helperFactory.pollReference().child(uid);
             };
 
+            helperFactory.optionValueReference = function (pollID, questionID, optionID) {
+                return helperFactory.pollReference().child(pollID).child('question').child(questionID).child('option').child(optionID).child('value');
+            };
+
             helperFactory.getPollData = function () {
                 return $firebaseObject(helperFactory.pollReference());
             };
@@ -938,6 +960,7 @@ materialAdmin
             helperFactory.getSpecificPollData = function (uid) {
                 return $firebaseObject(helperFactory.specificPollReference(uid));
             };
+
 
             return helperFactory;
 

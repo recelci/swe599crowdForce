@@ -91,7 +91,13 @@ materialAdmin
                 templateUrl: 'views/poll-questions.html',
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load ([])
+                        return $ocLazyLoad.load ([{
+                            name: 'vendors',
+                            files: [
+                                'vendors/input-mask/input-mask.min.js',
+                                'bower_components/angular-input-masks/angular-input-masks-standalone.min.js'
+                            ]
+                        }])
                     }
                 }
             })

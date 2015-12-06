@@ -7,19 +7,16 @@
 
         <div class="form-group">
             <div class="fg-line">
-                <blockquote class="m-b-25">
 
-                    <dl class="dl-horizontal">
-                        <dt>Title</dt>
-                        <dd>{{ specificPoll.title }}</dd>
-                    </dl>
+                <dl class="dl-horizontal">
+                    <dt>Title</dt>
+                    <dd>{{ specificPoll.title }}</dd>
+                </dl>
 
-                    <dl class="dl-horizontal">
-                        <dt>Description</dt>
-                        <dd>{{ specificPoll.description }}</dd>
-                    </dl>
-
-                </blockquote>
+                <dl class="dl-horizontal">
+                    <dt>Description</dt>
+                    <dd>{{ specificPoll.description }}</dd>
+                </dl>
             </div>
         </div>
 
@@ -34,7 +31,7 @@
 
     </div>
 
-    <div class="pmbb-body" ng-repeat="questions in specificPoll.question">
+    <div class="pmbb-body" ng-repeat="(qId, questions) in specificPoll.question">
         <div class="form-group">
             <div class="fg-line">
                 <blockquote class="m-b-25">
@@ -44,22 +41,29 @@
                         <dd>{{ questions.body }}</dd>
                     </dl>
 
+                    <br>
+
                     <dl class="dl-horizontal">
                         <dt>Options</dt>
-                        <dd ng-repeat="options in questions.option">{{ options.body }}</dd>
+                        <dd>
+                            <poll-question-option-list option-body="options.body" option-type="questions.answerType"
+                                                       option-id="oId" question-id='qId'
+                                                       specific-answer-value="$root.model.pollQuestionOptionValue.answer"
+                                                       ng-repeat="(oId, options) in questions.option"></poll-question-option-list>
+                        </dd>
                     </dl>
                 </blockquote>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
 
 <div class="pmb-block">
 
     <div class="pmbb-header">
         <h2>
-            <button class="btn btn-primary btn-lg" ng-click="submit()"> Submit</button>
+            <button class="btn btn-primary btn-lg" ng-click="submitAnswerForSpecificPoll()"> Submit</button>
         </h2>
     </div>
 
