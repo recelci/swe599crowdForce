@@ -68,9 +68,6 @@ materialAdmin
     // =========================================================================
 
     .controller('materialadminCtrl', function ($timeout, $state, growlService, $window, fireFactory, $rootScope) {
-        //Welcome Message
-        growlService.growl('Welcome back Mallinda!', 'inverse');
-
 
         // Detact Mobile Browser
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -145,7 +142,10 @@ materialAdmin
                 $rootScope.currentUserReference.userImage = loadedData.userImage;
                 $rootScope.currentUserReference.userImageSmall = loadedData.userImageSmall;
             }
-        })
+        });
+
+        //Welcome Message
+        growlService.growl('Welcome back '+ this.email, 'inverse');
     })
 
 
@@ -488,6 +488,12 @@ materialAdmin
         $scope.pollQuestionOptions = pollQuestionOption.list();
         $scope.currentPolls = currentPoll.list();
 
+        $scope.isCreateNewButtonDisabled = function () {
+
+                return $state.$current.name == "pages.poll.poll-create-new";
+
+        };
+
         $scope.isQuestionButtonDisabled = function () {
 
             return ($rootScope.model.pollQuestion.body && $rootScope.model.pollQuestion.answerType && $scope.pollQuestionOptions.length > 0);
@@ -526,6 +532,10 @@ materialAdmin
 
             $rootScope.model.pollQuestionOption = {};
 
+        };
+
+        $scope.removeOption = function (optionToBeRemoved) {
+            pollQuestionOption.remove(optionToBeRemoved);
         };
 
         $scope.submit = function () {
@@ -632,13 +642,6 @@ materialAdmin
             $rootScope.currentUserReference.currentUserData.$save();
 
         };
-
-        $scope.createNewPoll = function () {
-
-            $state.go("pages.poll.poll-create-new");
-        };
-
-
 
         $scope.guid = function(){
 
@@ -1029,6 +1032,10 @@ materialAdmin
             question.length = 0;
         };
 
+        questionService.remove = function (questionId) {
+            question.splice(questionId, 1);
+        };
+
         return questionService;
     })
 
@@ -1047,6 +1054,10 @@ materialAdmin
 
         optionService.clear = function () {
             option.length = 0;
+        };
+
+        optionService.remove = function (optionId) {
+            option.splice(optionId, 1);
         };
 
         return optionService;
