@@ -3,25 +3,27 @@
         <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Poll Details</h2>
     </div>
 
-    <div class="pmbb-body">
+    <div class="pmbb-body p-l-30">
 
         <div class="form-group">
             <div class="fg-line">
 
                 <dl class="dl-horizontal">
                     <dt>Title</dt>
-                    <dd>{{ $root.model.poll.title }}</dd>
+                    <dd>{{ specificPoll.title }}</dd>
                 </dl>
 
                 <dl class="dl-horizontal">
                     <dt>Description</dt>
-                    <dd>{{ $root.model.poll.description }}</dd>
+                    <dd>{{ specificPoll.description }}</dd>
                 </dl>
             </div>
         </div>
 
     </div>
 </div>
+
+<div class="clearfix"></div>
 
 <div class="pmb-block">
 
@@ -31,33 +33,40 @@
 
     </div>
 
-    <div class="pmbb-body" ng-repeat="questions in $root.model.poll.question">
+    <div class="pmbb-body p-l-20" ng-repeat="(qId, questions) in specificPoll.question">
         <div class="form-group">
             <div class="fg-line">
                 <blockquote class="m-b-25">
 
-                    <dl class="dl-horizontal">
-                        <dt>Question Body</dt>
-                        <dd>{{ questions.body }}</dd>
-                    </dl>
+                    <p>{{ questions.body }}</p>
 
-                    <dl class="dl-horizontal">
-                        <dt>Options</dt>
-                        <dd ng-repeat="options in questions.option">{{ options.body }}</dd>
-                    </dl>
+
+                        <div class="col-sm-3" ng-repeat="(oId, options) in questions.option">
+
+                            <div class="text-center">
+
+                                <pie-chart data="options.result2" options="pieChartOptions"></pie-chart>
+
+                            </div>
+
+                            <!--<div easypiechart options="easyPieOptions" percent="options.result">
+
+                                <div class="percent"> {{options.result}}</div>
+                                <div class="pie-title"> {{options.body}}</div>
+                                {{options.result2}}
+
+                                <pie-chart data="options.result2" options="pieChartOptions"></pie-chart>
+
+                            </div>-->
+                        </div>
+
+                    <div class="clearfix"></div>
+
+
                 </blockquote>
             </div>
         </div>
-    </div>
 
-</div>
-
-<div class="pmb-block">
-
-    <div class="pmbb-header">
-        <h2>
-            <button class="btn btn-primary btn-lg" ng-click="submit()"> Submit</button>
-        </h2>
     </div>
 
 </div>

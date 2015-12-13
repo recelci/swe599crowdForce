@@ -7,6 +7,8 @@ var materialAdmin = angular.module('materialAdmin', [
     'oc.lazyLoad',
     'nouislider',
     'ngTable',
-    'firebase'
+    'firebase',
+    'n3-pie-chart',
+    'easypiechart'
 ]);
  

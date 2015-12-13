@@ -145,7 +145,7 @@ materialAdmin
         });
 
         //Welcome Message
-        growlService.growl('Welcome back '+ this.email, 'inverse');
+        growlService.growl('Welcome back ' + this.email, 'inverse');
     })
 
 
@@ -314,6 +314,28 @@ materialAdmin
         this.rpResult = recentpostService.getRecentpost(this.img, this.user, this.text);
     })
 
+    // =========================================================================
+    // PIE CHART
+    // =========================================================================
+
+    .controller('chartCtrl', function ($scope) {
+        $scope.percent = 50;
+        $scope.options = {
+            barColor: '#ef1e25',
+            trackColor: '#f9f9f9',
+            scaleColor: '#dfe0e0',
+            scaleLength: 5,
+            lineCap: 'round',
+            lineWidth: 3,
+            size: 110,
+            rotate: 0,
+            animate: {
+                duration: 1000,
+                enabled: true
+            }
+        };
+    })
+
 
     //=================================================
     // Profile
@@ -326,18 +348,18 @@ materialAdmin
         //User
         this.profileSummary = "Sed eu est vulputate, fringilla ligula ac, maximus arcu. Donec sed felis vel magna mattis ornare ut non turpis. Sed id arcu elit. Sed nec sagittis tortor. Mauris ante urna, ornare sit amet mollis eu, aliquet ac ligula. Nullam dolor metus, suscipit ac imperdiet nec, consectetur sed ex. Sed cursus porttitor leo.";
 
-        this.fullName = "Mallinda Hollaway";
-        this.gender = "female";
+        this.fullName = "Osman Emre Ercin";
+        this.gender = "Male";
         this.birthDay = "23/06/1988";
         this.martialStatus = "Single";
         this.mobileNumber = "00971123456789";
-        this.emailAddress = "malinda.h@gmail.com";
-        this.twitter = "@malinda";
-        this.twitterUrl = "twitter.com/malinda";
-        this.skype = "malinda.hollaway";
-        this.addressSuite = "10098 ABC Towers";
-        this.addressCity = "Dubai Silicon Oasis, Dubai";
-        this.addressCountry = "United Arab Emirates";
+        this.emailAddress = "osman@gmail.com";
+        this.twitter = "@osman";
+        this.twitterUrl = "twitter.com/osman";
+        this.skype = "osman";
+        this.addressSuite = "Umraniye";
+        this.addressCity = "Istanbul";
+        this.addressCountry = "Turkey";
 
         //Edit
         this.editSummary = 0;
@@ -488,9 +510,30 @@ materialAdmin
         $scope.pollQuestionOptions = pollQuestionOption.list();
         $scope.currentPolls = currentPoll.list();
 
+        $scope.pieChartOptions = {thickness: 30, mode: "gauge", total: 100};
+        $scope.pieChartData = [
+            {"label":"b","value":25.05,"suffix":"%","color":"steelblue"}
+        ];
+
+        $scope.easyPiePercent = 50;
+        $scope.easyPieOptions = {
+            barColor: '#ef1e25',
+            trackColor: '#f9f9f9',
+            scaleColor: '#dfe0e0',
+            scaleLength: 5,
+            lineCap: 'round',
+            lineWidth: 3,
+            size: 110,
+            rotate: 0,
+            animate: {
+                duration: 1000,
+                enabled: true
+            }
+        };
+
         $scope.isCreateNewButtonDisabled = function () {
 
-                return $state.$current.name == "pages.poll.poll-create-new";
+            return $state.$current.name == "pages.poll.poll-create-new";
 
         };
 
@@ -551,6 +594,7 @@ materialAdmin
             }
 
             $rootScope.model.poll.question = $scope.pollQuestions;
+            $rootScope.model.poll.createDate = "10/12/2015";
 
             var pollJSON = angular.fromJson(angular.toJson($rootScope.model.poll));
             var fireBaseObj = fireFactory.pollReference().push(pollJSON);
@@ -581,17 +625,6 @@ materialAdmin
             }
         });
 
-        $scope.viewSpecificPoll = function (pollId) {
-
-            $scope.specificPollId = pollId;
-
-            $scope.specificPoll = currentPoll.get(pollId);
-
-            /*console.log(uuidService + " ");*/
-
-            $state.go("pages.poll.poll-view-specific.poll-questions");
-
-        };
 
         $scope.submitAnswerForSpecificPoll = function () {
 
@@ -643,7 +676,7 @@ materialAdmin
 
         };
 
-        $scope.guid = function(){
+        $scope.guid = function () {
 
             function s4() {
                 return Math.floor((1 + Math.random()) * 0x10000)
@@ -653,6 +686,108 @@ materialAdmin
 
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                 s4() + '-' + s4() + s4() + s4();
+
+        };
+
+        $scope.calculateResultForPercentType = function (questionId, optionId) {
+
+            /*$scope.questionOptionObject = $scope.specificPoll.question[questionId].option;
+
+             $scope.questionOptionValues = [];
+
+             angular.forEach($scope.questionOptionObject, function (value) {
+
+             $scope.questionOptionValues.push(value.option.value);
+
+             });*/
+
+            $scope.optionValueObject = $scope.specificPoll.question[questionId].option[optionId].value;
+
+            $scope.optionValueArray = [];
+
+            angular.forEach($scope.optionValueObject, function (value) {
+
+                $scope.optionValueArray.push(value * 100);
+
+            });
+
+            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+            console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
+
+            return $scope.optionAverage;
+
+        };
+
+
+        $scope.viewSpecificPoll = function (pollId) {
+
+            $scope.specificPollId = pollId;
+
+            $scope.specificPoll = currentPoll.get(pollId);
+
+            $scope.optionResultView = {
+                question: [{option: []}]
+            };
+
+
+            /*Calculating the result for the poll (Percent!)*/
+            $scope.specificPoll.$loaded().then(function (loadedData) {
+
+                angular.forEach(loadedData.question, function (qValue, qKey) {
+
+                    angular.forEach(qValue.option, function (oValue, oKey) {
+
+                        $scope.optionValueArray = [];
+
+                        angular.forEach(oValue.value, function (vValue, vKey) {
+
+                            $scope.optionValueArray.push(vValue * 100);
+
+                        });
+
+                        $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                        $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+
+                        $scope.specificPoll.question[qKey].option[oKey].result2 = ([{
+                            label: $scope.specificPoll.question[qKey].option[oKey].body,
+                            value: $scope.optionAverage,
+                            suffix: "%",
+                            color: "steelblue"
+                        }]
+                        );
+
+                        /*$scope.pieChartData2 = [
+                         {label: "CPU", value: 75, suffix: "%", color: "steelblue"}
+                         ];*/
+
+                        console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
+
+                    });
+
+
+                });
+
+                console.log($scope.specificPoll.question[0].option[0].result);
+
+            });
+
+
+            /*console.log(uuidService + " ");*/
+
+            $state.go("pages.poll.poll-view-specific.poll-questions");
+
+        };
+
+        $scope.calculateAverage = function (data) {
+
+            var sum = data.reduce(function (sum, value) {
+                return sum + value;
+            }, 0);
+
+            return Math.round(sum / data.length * 100) / 100;
 
         };
 
@@ -1001,12 +1136,24 @@ materialAdmin
                 return helperFactory.pollReference().child(pollID).child('question').child(questionID).child('option').child(optionID).child('value');
             };
 
+            helperFactory.specificPollQuestionReference = function (pollID, questionID) {
+                return helperFactory.pollReference().child(pollID).child('question').child(questionID).child('option');
+            };
+
             helperFactory.getPollData = function () {
                 return $firebaseObject(helperFactory.pollReference());
             };
 
             helperFactory.getSpecificPollData = function (uid) {
                 return $firebaseObject(helperFactory.specificPollReference(uid));
+            };
+
+            helperFactory.getSpecificPollQuestionOption = function (uid) {
+                return $firebaseObject(helperFactory.specificPollReference(uid));
+            };
+
+            helperFactory.getSpecificPollQuestionOption = function (pollID, questionID) {
+                return $firebaseObject(helperFactory.specificPollQuestionReference(pollID, questionID));
             };
 
 
@@ -1085,6 +1232,27 @@ materialAdmin
         return currentPollsService;
     })
 
+    /*.factory('calculateAverage', function () {
+
+     var result = {};
+
+
+     result.getAverage = function (data) {
+
+     var sum = data.reduce(function (sum, value) {
+     return sum + value;
+     }, 0);
+
+     return sum / data.length;
+     };
+
+     /!*result.getAverage = function () {
+
+     return sum / data.length;
+
+     };*!/
+
+     })*/
 
 ;
 

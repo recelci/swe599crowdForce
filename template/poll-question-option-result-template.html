@@ -1,0 +1,115 @@
+<div class="row">
+
+    <div class="col-sm-4" ng-hide="optionType != 'Number' ">
+        <div class="form-group fg-line">
+
+            <p>{{optionBody}}</p>
+            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-number-mask
+                   placeholder="eg: 223,659.98">
+
+        </div>
+    </div>
+
+    <div class="col-sm-4" ng-hide="optionType != 'Text' ">
+        <div class="form-group fg-line">
+
+            <p>{{optionBody}}</p>
+            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]"
+                   placeholder="You are free! Type anything...">
+
+        </div>
+    </div>
+
+    <div class="col-sm-4" ng-hide="optionType != 'Time' ">
+        <div class="form-group fg-line">
+
+            <p>{{optionBody}}</p>
+            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-time-mask
+                   placeholder="eg: 14:45">
+
+        </div>
+    </div>
+
+    <div class="col-sm-4" ng-hide="optionType != 'Date' ">
+        <div class="form-group fg-line">
+
+            <p>{{optionBody}}</p>
+            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-date-mask
+                   placeholder="eg: 23/05/2014">
+
+        </div>
+    </div>
+
+    <div class="col-sm-4" ng-hide="optionType != 'Currency' ">
+        <div class="form-group fg-line">
+
+            <p>{{optionBody}}</p>
+            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-money-mask
+                   placeholder="eg: $ 21,336,256.87">
+
+        </div>
+    </div>
+
+    <div class="col-sm-4" ng-hide="optionType != 'Percent' ">
+        <div class="form-group fg-line">
+
+            <p>{{optionBody}}</p>
+
+            <div class="col-md-3 col-sm-6">
+                <div id="pie-charts" class="dash-widget-item">
+
+                    <div class="p-t-20 p-b-20 text-center">
+                        <div class="easy-pie sub-pie-1" data-percent="56" data-easypie-chart>
+                            <div class="percent">56</div>
+                            <div class="pie-title">Bounce Rate</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-sm-4" ng-hide="optionType != 'Radio' ">
+        <div class="form-group fg-line">
+
+            <div class="radio m-b-15">
+                <label>
+                    <input type="radio" name="radioType" value="true" ng-model="answerValue[questionId][optionId]">
+                    <i class="input-helper"></i>
+                    {{optionBody}}
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-sm-4" ng-hide="optionType != 'Multiple-Choice' ">
+        <div class="form-group fg-line">
+
+            <div class="checkbox m-b-15">
+                <label>
+                    <input type="checkbox" value="true" ng-model="answerValue[questionId][optionId]">
+                    <i class="input-helper"></i>
+                    {{optionBody}}
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-sm-4" ng-hide="optionType != 'List' ">
+        <div class="form-group fg-line">
+
+            <p>{{optionBody}}</p>
+
+            <select class="form-control" data-ng-model="answerValue[questionId][optionId]" ng-options="">
+
+            </select>
+
+        </div>
+    </div>
+
+
+</div>
