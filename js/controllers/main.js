@@ -30,7 +30,8 @@ materialAdmin
                 createDate: "",
                 endDate: "",
                 updateDate: "",
-                authRole: []
+                authRole: [],
+                readyToPublish: ""
             },
 
             pollQuestion: {
@@ -503,16 +504,33 @@ materialAdmin
     // POLL
     //=================================================
 
-    .controller('PollCtrl', function PollCtrl($scope, fireFactory, $rootScope, $state, pollQuestion, pollQuestionOption, currentPoll, $filter, $sce, ngTableParams) {
+    .controller('PollCtrl', function PollCtrl($scope, fireFactory, $rootScope, $state, pollQuestion, pollQuestionOption, currentPoll, $filter, $sce, ngTableParams, $location) {
 
-        $rootScope.model.poll.owner = $rootScope.currentUserReference.userId;
         $scope.pollQuestions = pollQuestion.list();
         $scope.pollQuestionOptions = pollQuestionOption.list();
-        $scope.currentPolls = currentPoll.list();
+
+        $scope.viewMyPolls = localStorage.getItem('viewMyPolls');
+
+        $scope.getCurrentPolls = function () {
+
+            if ($scope.viewMyPolls == 1) {
+                $scope.currentPolls = currentPoll.listUserPoll($rootScope.currentUserReference.userId);
+            } else {
+                $scope.currentPolls = currentPoll.listPublished();
+            }
+
+        };
+
+        $scope.getCurrentPolls();
+
+
+        $scope.$watch('viewMyPolls', function (newVal, oldVal) {
+            $scope.getCurrentPolls();
+        }, true);
 
         $scope.pieChartOptions = {thickness: 30, mode: "gauge", total: 100};
         $scope.pieChartData = [
-            {"label":"b","value":25.05,"suffix":"%","color":"steelblue"}
+            {"label": "b", "value": 25.05, "suffix": "%", "color": "steelblue"}
         ];
 
         $scope.easyPiePercent = 50;
@@ -593,19 +611,51 @@ materialAdmin
                 return;
             }
 
+            $rootScope.model.poll.owner = $rootScope.currentUserReference.userId;
             $rootScope.model.poll.question = $scope.pollQuestions;
             $rootScope.model.poll.createDate = "10/12/2015";
+
+            if ($rootScope.model.poll.readyToPublish != false || $rootScope.model.poll.readyToPublish === "") {
+                $rootScope.model.poll.readyToPublish = true;
+
+            }
 
             var pollJSON = angular.fromJson(angular.toJson($rootScope.model.poll));
             var fireBaseObj = fireFactory.pollReference().push(pollJSON);
 
-            pollQuestion.clear();
-            pollQuestionOption.clear();
-            $rootScope.model.poll = "";
-            $rootScope.model.pollQuestion = "";
-            $rootScope.model.pollQuestionOption = "";
+            $scope.clearForm();
 
             $scope.userPollCreateInteraction(fireBaseObj.key());
+
+            if($scope.specificPollId){
+
+                fireFactory.specificPollReference($scope.specificPollId).remove(function(error) {
+
+                    alert(error ? "Error occured!" : "Your poll is published!");
+
+                });
+
+            }
+
+            $scope.viewSpecificPoll(fireBaseObj.key());
+        };
+
+        $scope.saveTemplate = function () {
+
+            $rootScope.model.poll.readyToPublish = false;
+            $scope.submit();
+
+        };
+
+        $scope.clearForm = function () {
+
+
+            pollQuestion.clear();
+            pollQuestionOption.clear();
+            $rootScope.model.poll = {};
+            $rootScope.model.pollQuestion = {};
+            $rootScope.model.pollQuestionOption = {};
+            $scope.specificPoll = {};
 
         };
 
@@ -691,16 +741,6 @@ materialAdmin
 
         $scope.calculateResultForPercentType = function (questionId, optionId) {
 
-            /*$scope.questionOptionObject = $scope.specificPoll.question[questionId].option;
-
-             $scope.questionOptionValues = [];
-
-             angular.forEach($scope.questionOptionObject, function (value) {
-
-             $scope.questionOptionValues.push(value.option.value);
-
-             });*/
-
             $scope.optionValueObject = $scope.specificPoll.question[questionId].option[optionId].value;
 
             $scope.optionValueArray = [];
@@ -726,60 +766,94 @@ materialAdmin
 
             $scope.specificPoll = currentPoll.get(pollId);
 
-            $scope.optionResultView = {
-                question: [{option: []}]
-            };
-
-
             /*Calculating the result for the poll (Percent!)*/
             $scope.specificPoll.$loaded().then(function (loadedData) {
 
-                angular.forEach(loadedData.question, function (qValue, qKey) {
+                if ($scope.specificPoll.readyToPublish == false) {
 
-                    angular.forEach(qValue.option, function (oValue, oKey) {
+                    pollQuestion.clear();
 
-                        $scope.optionValueArray = [];
+                    /*$rootScope.model.poll = $scope.specificPoll;*/
 
-                        angular.forEach(oValue.value, function (vValue, vKey) {
+                    angular.forEach(loadedData.question, function (qValue, qKey) {
 
-                            $scope.optionValueArray.push(vValue * 100);
+                        angular.forEach(qValue.option, function (oValue, oKey) {
+
+                            pollQuestionOption.add({
+                                body: oValue.body,
+                                value: ""
+                            });
+
+                            $rootScope.model.pollQuestionOption = {};
 
                         });
 
-                        $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+                        pollQuestion.add({
+                            body: qValue.body,
+                            answerType: qValue.answerType,
+                            option: $scope.pollQuestionOptions.slice()
+                        });
 
-                        $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
-
-
-                        $scope.specificPoll.question[qKey].option[oKey].result2 = ([{
-                            label: $scope.specificPoll.question[qKey].option[oKey].body,
-                            value: $scope.optionAverage,
-                            suffix: "%",
-                            color: "steelblue"
-                        }]
-                        );
-
-                        /*$scope.pieChartData2 = [
-                         {label: "CPU", value: 75, suffix: "%", color: "steelblue"}
-                         ];*/
-
-                        console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
+                        $rootScope.model.pollQuestion = {};
+                        pollQuestionOption.clear();
 
                     });
+
+                    $state.go("pages.poll.poll-create-new");
+
+                } else {
+
+                    angular.forEach(loadedData.question, function (qValue, qKey) {
+
+                        angular.forEach(qValue.option, function (oValue, oKey) {
+
+                            $scope.optionValueArray = [];
+
+                            angular.forEach(oValue.value, function (vValue, vKey) {
+
+                                $scope.optionValueArray.push(vValue * 100);
+
+                            });
+
+                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+
+                            $scope.specificPoll.question[qKey].option[oKey].result2 = ([{
+                                    label: $scope.specificPoll.question[qKey].option[oKey].body,
+                                    value: $scope.optionAverage,
+                                    suffix: "%",
+                                    color: "steelblue"
+                                }]
+                            );
+
+                            console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
+
+                        });
+
+                    });
+
+                    console.log($scope.specificPoll.question[0].option[0].result);
+
+                    $state.go("pages.poll.poll-view-specific.poll-questions");
+                }
+
+            });
+
+        };
+
+        /*$scope.continueFromTemplate = function (pollId){
+
+            $scope.specificPoll = {};
+            var pollTemp = currentPoll.get(pollId);
+            pollTemp.$bindTo($scope, "specificPoll")
+                .then(function () {
 
 
                 });
 
-                console.log($scope.specificPoll.question[0].option[0].result);
-
-            });
-
-
-            /*console.log(uuidService + " ");*/
-
-            $state.go("pages.poll.poll-view-specific.poll-questions");
-
-        };
+        };*/
 
         $scope.calculateAverage = function (data) {
 
@@ -790,6 +864,12 @@ materialAdmin
             return Math.round(sum / data.length * 100) / 100;
 
         };
+
+        $scope.getUrl = function(){
+
+            $scope.pollUrl = $location.absUrl();
+
+        }
 
     })
 
@@ -1128,8 +1208,16 @@ materialAdmin
                 return helperFactory.dataReference().child('poll');
             };
 
-            helperFactory.specificPollReference = function (uid) {
-                return helperFactory.pollReference().child(uid);
+            helperFactory.publishedPollReference = function () {
+                return helperFactory.pollReference().orderByChild("readyToPublish").equalTo(true);
+            };
+
+            helperFactory.usersPollReference = function (userId) {
+                return helperFactory.pollReference().orderByChild("owner").equalTo(userId);
+            };
+
+            helperFactory.specificPollReference = function (pollID) {
+                return helperFactory.pollReference().child(pollID);
             };
 
             helperFactory.optionValueReference = function (pollID, questionID, optionID) {
@@ -1144,18 +1232,29 @@ materialAdmin
                 return $firebaseObject(helperFactory.pollReference());
             };
 
-            helperFactory.getSpecificPollData = function (uid) {
-                return $firebaseObject(helperFactory.specificPollReference(uid));
+            helperFactory.getPublishedPollData = function () {
+                return $firebaseObject(helperFactory.publishedPollReference());
             };
 
-            helperFactory.getSpecificPollQuestionOption = function (uid) {
-                return $firebaseObject(helperFactory.specificPollReference(uid));
+            helperFactory.getUsersPollData = function (userId) {
+                return $firebaseObject(helperFactory.usersPollReference(userId));
+            };
+
+            helperFactory.getSpecificPollData = function (pollID) {
+                return $firebaseObject(helperFactory.specificPollReference(pollID));
+            };
+
+            helperFactory.getSpecificPollQuestionOption = function (pollID) {
+                return $firebaseObject(helperFactory.specificPollReference(pollID));
             };
 
             helperFactory.getSpecificPollQuestionOption = function (pollID, questionID) {
                 return $firebaseObject(helperFactory.specificPollQuestionReference(pollID, questionID));
             };
 
+            helperFactory.removeSpecificPollData = function (pollID) {
+                return $firebaseObject(helperFactory.specificPollReference(pollID).remove());
+            };
 
             return helperFactory;
 
@@ -1211,22 +1310,30 @@ materialAdmin
     })
 
     .factory('currentPoll', function (fireFactory) {
-        var currentPolls = fireFactory.getPollData();
-        var currentPollsService = {};
 
+        var currentPollsService = {};
 
         currentPollsService.get = function (specificPollID) {
             if (specificPollID) {
-
                 var specificPollData = fireFactory.getSpecificPollData(specificPollID);
-
             }
-
             return specificPollData;
         };
 
         currentPollsService.list = function () {
-            return currentPolls;
+            return fireFactory.getPollData();
+        };
+
+        currentPollsService.listPublished = function () {
+            return fireFactory.getPublishedPollData();
+        };
+
+        currentPollsService.listUserPoll = function (userId) {
+
+            if (userId) {
+                var userPollData = fireFactory.getUsersPollData(userId);
+            }
+            return userPollData;
         };
 
         return currentPollsService;

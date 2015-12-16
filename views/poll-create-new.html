@@ -142,9 +142,21 @@
 
 <div class="pmb-block" ng-if="pollQuestions.length > 0">
 
-    <div class="pmbb-header">
+    <div class="pmbb-header col-sm-4">
         <h2>
-            <button class="btn btn-primary btn-lg" ng-click="submit()"> READY</button>
+            <button class="btn btn-primary btn-lg " ng-click="submit()"> READY</button>
+        </h2>
+    </div>
+
+    <div class="pmbb-header col-sm-4" style="text-align:center">
+        <h2>
+            <button class="btn btn-primary btn-lg " ng-click="saveTemplate()"> SAVE & EXIT</button>
+        </h2>
+    </div>
+
+    <div class="pmbb-header col-sm-4">
+        <h2>
+            <button class="btn btn-primary btn-lg pull-right" ng-click="clearForm()"> CANCEL</button>
         </h2>
     </div>
 

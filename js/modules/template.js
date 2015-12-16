@@ -151,4 +151,40 @@ materialAdmin
         }
     })
 
+
+    .directive('myPollList', function(){
+
+        return {
+            restrict: 'A',
+            scope: {
+                myPollList: '='
+            },
+
+            link: function(scope, element) {
+
+                //Default State
+                if(scope.myPollList === '1') {
+                    element.prop('checked', true);
+                }
+
+                //Change State
+
+                element.on('change', function(){
+                    if(element.is(':checked')) {
+                        localStorage.setItem('viewMyPolls', 1);
+                        scope.$apply(function(){
+                            scope.myPollList = '1';
+                        })
+                    }
+                    else {
+                        localStorage.setItem('viewMyPolls', 0);
+                        scope.$apply(function(){
+                            scope.myPollList = '0';
+                        })
+                    }
+                })
+            }
+        }
+    });
+
    
