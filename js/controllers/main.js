@@ -22,6 +22,7 @@ materialAdmin
             },
 
             poll: {
+                isOwnerPrivate: "",
                 title: "",
                 description: "",
                 question: [],
@@ -599,6 +600,10 @@ materialAdmin
             pollQuestionOption.remove(optionToBeRemoved);
         };
 
+        $scope.removeQuestion = function (questionToBeRemoved) {
+            pollQuestion.remove(questionToBeRemoved);
+        };
+
         $scope.submit = function () {
 
             if (!$rootScope.model.poll.title) {
@@ -611,9 +616,15 @@ materialAdmin
                 return;
             }
 
+            if(!$rootScope.model.poll.isOwnerPrivate){
+
+                $rootScope.model.poll.isOwnerPrivate = false;
+
+            }
+
             $rootScope.model.poll.owner = $rootScope.currentUserReference.userId;
             $rootScope.model.poll.question = $scope.pollQuestions;
-            $rootScope.model.poll.createDate = "10/12/2015";
+            $rootScope.model.poll.createDate = new Date();
 
             if ($rootScope.model.poll.readyToPublish != false || $rootScope.model.poll.readyToPublish === "") {
                 $rootScope.model.poll.readyToPublish = true;

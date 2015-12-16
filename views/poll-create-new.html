@@ -16,6 +16,33 @@
             </div>
             <label class="fg-label">Description</label>
         </div>
+
+        <div class="form-group fg-line" data-ng-controller="DatepickerDemoCtrl">
+
+            <div class="date-picker input-group" ng-class="{ 'is-opened': opened == true }">
+                <span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
+
+                <div class="fg-line" ng-class="{ 'fg-toggled': opened == true }">
+                    <input ng-click="open($event, 'opened')" type="text" class="form-control"
+                           datepicker-popup="{{format}}" show-weeks="false" ng-model="$root.model.poll.endDate" is-open="opened"
+                           min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close"
+                           placeholder="End Date"/>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group fg-line">
+
+            <div class="checkbox m-b-15">
+                <label>
+                    <input type="checkbox" value="true" ng-model="$root.model.poll.isOwnerPrivate">
+                    <i class="input-helper"></i>
+                    Keep me private!
+                </label>
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -115,24 +142,34 @@
 
     <div class="pmbb-body p-l-30">
         <div class="form-group">
-            <div class="fg-line">
-                <blockquote class="m-b-25" ng-repeat="questions in pollQuestions">
+            <div class="fg-line" ng-repeat="(qId, questions) in pollQuestions">
 
-                    <dl class="dl-horizontal">
-                        <dt>Question Body</dt>
-                        <dd>{{ questions.body }}</dd>
-                    </dl>
+                <div class="pmbb-header col-sm-1">
+                    <button class="btn btn-lg bgm-cyan pull-right" ng-click="removeQuestion(qId)"><i
+                            class="zmdi zmdi-close"></i>
+                    </button>
+                </div>
 
-                    <dl class="dl-horizontal">
-                        <dt>Answer Type</dt>
-                        <dd>{{ questions.answerType }}</dd>
-                    </dl>
+                <div class="pmbb-header col-sm-11">
+                    <blockquote class="m-b-25">
 
-                    <dl class="dl-horizontal">
-                        <dt>Options</dt>
-                        <dd ng-repeat="options in questions.option">{{ options.body }}</dd>
-                    </dl>
-                </blockquote>
+                        <dl class="dl-horizontal">
+                            <dt>Question Body</dt>
+                            <dd>{{ questions.body }}</dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Answer Type</dt>
+                            <dd>{{ questions.answerType }}</dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Options</dt>
+                            <dd ng-repeat="options in questions.option">{{ options.body }}</dd>
+                        </dl>
+
+                    </blockquote>
+                </div>
             </div>
         </div>
     </div>
