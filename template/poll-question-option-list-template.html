@@ -55,7 +55,7 @@
 
             <p>{{optionBody}}</p>
             <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-percentage-mask
-                   placeholder="eg: 39.75 %">
+                   placeholder="eg: 39.75 %" ng-blur="calculateResiduePercent(questionId, optionId)">
 
         </div>
     </div>
