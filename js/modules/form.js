@@ -145,7 +145,6 @@ materialAdmin
 
                     var length = numProps(scope.answerValue[qId]);
 
-
                     for (var i = 0; i < length; i++) {
 
                         sum = sum + scope.answerValue[qId][i]*100;
@@ -154,24 +153,11 @@ materialAdmin
 
                     if (sum > 100){
 
-                        alert(sum +" can not be higher than 100%");
-
                         scope.answerValue[qId][oId] = ((scope.answerValue[qId][oId]*100) - (sum - 100))/100;
 
-                    } else{
-
-                        alert(sum +" is less than 100%, Good!");
                     }
 
                 };
-
-                /*scope.$watch('answerValue', function (newVal, oldVal) {
-                    scope.calculateResiduePercent();
-                }, true);*/
-
-                function add(a, b) {
-                    return a + b;
-                }
 
                 function numProps(obj) {
                     var c = 0;
@@ -180,7 +166,6 @@ materialAdmin
                     }
                     return c;
                 }
-
 
             }
 

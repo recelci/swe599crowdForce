@@ -54,7 +54,6 @@ materialAdmin
                 'Date',
                 'Currency',
                 'Percent',
-                'List',
                 'Radio',
                 'Multiple-Choice'
             ]
@@ -529,26 +528,17 @@ materialAdmin
             $scope.getCurrentPolls();
         }, true);
 
-        $scope.pieChartOptions = {thickness: 30, mode: "gauge", total: 100};
-        $scope.pieChartData = [
-            {"label": "b", "value": 25.05, "suffix": "%", "color": "steelblue"}
-        ];
+        $scope.pieChartGaugeOptions = {thickness: 30, mode: "gauge", total: 100};
 
-        $scope.easyPiePercent = 50;
-        $scope.easyPieOptions = {
-            barColor: '#ef1e25',
-            trackColor: '#f9f9f9',
-            scaleColor: '#dfe0e0',
-            scaleLength: 5,
-            lineCap: 'round',
-            lineWidth: 3,
-            size: 110,
-            rotate: 0,
-            animate: {
-                duration: 1000,
-                enabled: true
-            }
-        };
+        $scope.pieChartOptions = {thickness: 30};
+
+        $scope.deleteThisData = [
+            {data: 1, color: '#F44336', label: 'Toyota'},
+            {data: 2, color: '#03A9F4', label: 'Nissan'},
+            {data: 3, color: '#8BC34A', label: 'Hyundai'},
+            {data: 4, color: '#FFEB3B', label: 'Scion'},
+            {data: 4, color: '#009688', label: 'Daihatsu'},
+        ];
 
         $scope.isCreateNewButtonDisabled = function () {
 
@@ -616,7 +606,7 @@ materialAdmin
                 return;
             }
 
-            if(!$rootScope.model.poll.isOwnerPrivate){
+            if (!$rootScope.model.poll.isOwnerPrivate) {
 
                 $rootScope.model.poll.isOwnerPrivate = false;
 
@@ -638,9 +628,9 @@ materialAdmin
 
             $scope.userPollCreateInteraction(fireBaseObj.key());
 
-            if($scope.specificPollId){
+            if ($scope.specificPollId) {
 
-                fireFactory.specificPollReference($scope.specificPollId).remove(function(error) {
+                fireFactory.specificPollReference($scope.specificPollId).remove(function (error) {
 
                     alert(error ? "Error occured!" : "Your poll is published!");
 
@@ -737,47 +727,12 @@ materialAdmin
 
         };
 
-        $scope.guid = function () {
-
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                s4() + '-' + s4() + s4() + s4();
-
-        };
-
-        $scope.calculateResultForPercentType = function (questionId, optionId) {
-
-            $scope.optionValueObject = $scope.specificPoll.question[questionId].option[optionId].value;
-
-            $scope.optionValueArray = [];
-
-            angular.forEach($scope.optionValueObject, function (value) {
-
-                $scope.optionValueArray.push(value * 100);
-
-            });
-
-            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-            console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
-
-            return $scope.optionAverage;
-
-        };
-
-
         $scope.viewSpecificPoll = function (pollId) {
 
             $scope.specificPollId = pollId;
 
             $scope.specificPoll = currentPoll.get(pollId);
 
-            /*Calculating the result for the poll (Percent!)*/
             $scope.specificPoll.$loaded().then(function (loadedData) {
 
                 if ($scope.specificPoll.readyToPublish == false) {
@@ -812,40 +767,97 @@ materialAdmin
 
                     $state.go("pages.poll.poll-create-new");
 
-                } else {
+                }
+                /*Calculating the result for the poll*/
+                else {
 
                     angular.forEach(loadedData.question, function (qValue, qKey) {
 
                         angular.forEach(qValue.option, function (oValue, oKey) {
 
                             $scope.optionValueArray = [];
+                            $scope.specificPoll.question[qKey].result = [];
 
                             angular.forEach(oValue.value, function (vValue, vKey) {
 
-                                $scope.optionValueArray.push(vValue * 100);
+
+                                if (qValue.answerType == "Percent") {
+
+                                    $scope.optionValueArray.push(vValue * 100);
+
+                                } else if (qValue.answerType == "Time") {
+
+                                    $scope.optionValueArray.push(vValue.getMilliseconds());
+
+                                } else {
+                                    $scope.optionValueArray.push(vValue);
+                                }
+
 
                             });
 
-                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+                            if (qValue.answerType == "Percent") {
 
-                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
 
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
 
-                            $scope.specificPoll.question[qKey].option[oKey].result2 = ([{
-                                    label: $scope.specificPoll.question[qKey].option[oKey].body,
-                                    value: $scope.optionAverage,
-                                    suffix: "%",
-                                    color: "steelblue"
-                                }]
-                            );
+                            } else if (qValue.answerType == "Number") {
+
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+                            } else if (qValue.answerType == "Currency") {
+
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+                            } else if (qValue.answerType == "Radio") {
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
+
+                            } else if (qValue.answerType == "Multiple-Choice") {
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
+
+                            } else if (qValue.answerType == "Date") {
+
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+                            } else if (qValue.answerType == "Time") {
+
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+                            } else {
+                                /*alert("WHAT?")*/
+                            }
 
                             console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
 
                         });
 
+
+                        angular.forEach(qValue.option, function (oValue, oKey) {
+
+                            $scope.specificPoll.question[qKey].result.push({
+                                value: oValue.result,
+                                color: getRandomColor(),
+                                label: oValue.body
+                            })
+
+                        });
+
+
                     });
 
-                    console.log($scope.specificPoll.question[0].option[0].result);
+                    console.log($scope.specificPoll.question[0].result);
+
 
                     $state.go("pages.poll.poll-view-specific.poll-questions");
                 }
@@ -856,15 +868,15 @@ materialAdmin
 
         /*$scope.continueFromTemplate = function (pollId){
 
-            $scope.specificPoll = {};
-            var pollTemp = currentPoll.get(pollId);
-            pollTemp.$bindTo($scope, "specificPoll")
-                .then(function () {
+         $scope.specificPoll = {};
+         var pollTemp = currentPoll.get(pollId);
+         pollTemp.$bindTo($scope, "specificPoll")
+         .then(function () {
 
 
-                });
+         });
 
-        };*/
+         };*/
 
         $scope.calculateAverage = function (data) {
 
@@ -872,11 +884,11 @@ materialAdmin
                 return sum + value;
             }, 0);
 
-            return Math.round(sum / data.length * 100) / 100;
+            return Math.round(sum / data.length);
 
         };
 
-        $scope.getUrl = function(){
+        $scope.getUrl = function () {
 
             $scope.pollUrl = $location.absUrl();
 
@@ -1348,29 +1360,36 @@ materialAdmin
         };
 
         return currentPollsService;
-    })
+    });
 
-    /*.factory('calculateAverage', function () {
+/*.factory('calculateAverage', function () {
 
-     var result = {};
+ var result = {};
 
 
-     result.getAverage = function (data) {
+ result.getAverage = function (data) {
 
-     var sum = data.reduce(function (sum, value) {
-     return sum + value;
-     }, 0);
+ var sum = data.reduce(function (sum, value) {
+ return sum + value;
+ }, 0);
 
-     return sum / data.length;
-     };
+ return sum / data.length;
+ };
 
-     /!*result.getAverage = function () {
+ /!*result.getAverage = function () {
 
-     return sum / data.length;
+ return sum / data.length;
 
-     };*!/
+ };*!/
 
-     })*/
+ })*/
 
-;
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 

@@ -1,85 +1,106 @@
 <div class="row">
 
-    <div class="col-sm-4" ng-hide="optionType != 'Number' ">
+    <div class="col-sm-4" ng-if="optionType == 'Number' ">
         <div class="form-group fg-line">
 
             <p>{{optionBody}}</p>
-            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-number-mask
+            <input type="text" class="form-control" value="" ng-model="$parent.answerValue[questionId][optionId]" ui-number-mask
                    placeholder="eg: 223,659.98">
 
         </div>
     </div>
 
-    <div class="col-sm-4" ng-hide="optionType != 'Text' ">
+    <div class="col-sm-4" ng-if="optionType == 'Text' ">
         <div class="form-group fg-line">
 
             <p>{{optionBody}}</p>
-            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]"
+            <input type="text" class="form-control" value="" ng-model="$parent.answerValue[questionId][optionId]"
                    placeholder="You are free! Type anything...">
 
         </div>
     </div>
 
-    <div class="col-sm-4" ng-hide="optionType != 'Time' ">
+    <div class="col-sm-4" ng-if="optionType == 'Time' ">
         <div class="form-group fg-line">
 
             <p>{{optionBody}}</p>
-            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-time-mask
-                   placeholder="eg: 14:45">
+
+            <div class="form-group fg-line">
+
+                <timepicker ng-model="answerValue[questionId][optionId]" minute-step="5"
+                            show-meridian="false" default-value="00:00"></timepicker>
+
+            </div>
 
         </div>
     </div>
 
-    <div class="col-sm-4" ng-hide="optionType != 'Date' ">
-        <div class="form-group fg-line">
+    <div class="col-sm-4" ng-if="optionType == 'Date' ">
 
-            <p>{{optionBody}}</p>
-            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-date-mask
-                   placeholder="eg: 23/05/2014">
+        <p>{{optionBody}}</p>
+
+        <div class="form-group fg-line" data-ng-controller="DatepickerDemoCtrl">
+
+            <div class="date-picker input-group" ng-class="{ 'is-opened': opened == true }">
+                <span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
+
+                <div class="fg-line" ng-class="{ 'fg-toggled': opened == true }">
+                    <input ng-click="open($event, 'opened')" type="text" class="form-control"
+                           datepicker-popup="{{format}}" show-weeks="false" ng-model="$parent.answerValue[questionId][optionId]"
+                           is-open="opened"
+                           min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close"
+                           placeholder="End Date"/>
+                </div>
+
+            </div>
 
         </div>
+
     </div>
 
-    <div class="col-sm-4" ng-hide="optionType != 'Currency' ">
+    <div class="col-sm-4" ng-if="optionType == 'Currency' ">
         <div class="form-group fg-line">
 
             <p>{{optionBody}}</p>
-            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-money-mask
+            <input type="text" class="form-control" value="" ng-model="$parent.answerValue[questionId][optionId]" ui-money-mask
                    placeholder="eg: $ 21,336,256.87">
 
         </div>
     </div>
 
-    <div class="col-sm-4" ng-hide="optionType != 'Percent' ">
+    <div class="col-sm-4" ng-if="optionType == 'Percent' ">
         <div class="form-group fg-line">
 
             <p>{{optionBody}}</p>
-            <input type="text" class="form-control" value="" ng-model="answerValue[questionId][optionId]" ui-percentage-mask
+            <input type="text" class="form-control" value="" ng-model="$parent.answerValue[questionId][optionId]"
+                   ui-percentage-mask
                    placeholder="eg: 39.75 %" ng-blur="calculateResiduePercent(questionId, optionId)">
 
         </div>
     </div>
 
-    <div class="col-sm-4" ng-hide="optionType != 'Radio' ">
+    <div class="col-sm-4" ng-if="optionType == 'Radio' ">
         <div class="form-group fg-line">
 
             <div class="radio m-b-15">
                 <label>
-                    <input type="radio" name="radioType" value="true" ng-model="answerValue[questionId][optionId]">
+                    <input type="radio" name="radioType" value="true" ng-model="$parent.answerValue[questionId][optionId]">
                     <i class="input-helper"></i>
+
                     {{optionBody}}
+
                 </label>
             </div>
 
         </div>
     </div>
 
-    <div class="col-sm-4" ng-hide="optionType != 'Multiple-Choice' ">
+    <div class="col-sm-4" ng-if="optionType == 'Multiple-Choice' ">
         <div class="form-group fg-line">
 
             <div class="checkbox m-b-15">
                 <label>
-                    <input type="checkbox" value="true" ng-model="answerValue[questionId][optionId]">
+                    <input type="checkbox" value="true" ng-model="$parent.answerValue[questionId][optionId]">
                     <i class="input-helper"></i>
                     {{optionBody}}
                 </label>
@@ -88,17 +109,16 @@
         </div>
     </div>
 
-    <div class="col-sm-4" ng-hide="optionType != 'List' ">
+    <div class="col-sm-4" ng-if="optionType == 'List' ">
         <div class="form-group fg-line">
 
             <p>{{optionBody}}</p>
 
-            <select class="form-control" data-ng-model="answerValue[questionId][optionId]" ng-options="">
+            <select class="form-control" data-ng-model="$parent.answerValue[questionId][optionId]" ng-options="">
 
             </select>
 
         </div>
     </div>
-
 
 </div>

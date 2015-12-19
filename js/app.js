@@ -9,6 +9,6 @@ var materialAdmin = angular.module('materialAdmin', [
     'ngTable',
     'firebase',
     'n3-pie-chart',
-    'easypiechart'
+    'ng-fusioncharts'
 ]);
  
