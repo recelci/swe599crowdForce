@@ -511,34 +511,64 @@ materialAdmin
 
         $scope.viewMyPolls = localStorage.getItem('viewMyPolls');
 
+        $rootScope.searchTerm = '';
+
         $scope.getCurrentPolls = function () {
 
             if ($scope.viewMyPolls == 1) {
                 $scope.currentPolls = currentPoll.listUserPoll($rootScope.currentUserReference.userId);
+                $scope.searchListPolls = currentPoll.listUserPoll($rootScope.currentUserReference.userId);
             } else {
                 $scope.currentPolls = currentPoll.listPublished();
+                $scope.searchListPolls = currentPoll.listPublished();
             }
 
         };
 
         $scope.getCurrentPolls();
 
-
         $scope.$watch('viewMyPolls', function (newVal, oldVal) {
             $scope.getCurrentPolls();
         }, true);
 
+        $rootScope.$watch('searchTerm', function () {
+
+            if ($rootScope.searchTerm.length > 0) {
+
+                var searchResult = [];
+
+                angular.forEach($scope.searchListPolls, function (value, key) {
+                    var tempSearchTerm = $rootScope.searchTerm;
+                    var tempDescription = value.description;
+                    tempSearchTerm = angular.lowercase(tempSearchTerm);
+                    tempDescription = angular.lowercase(tempDescription);
+
+                    if (tempDescription.search(tempSearchTerm) > -1) {
+
+                        var matches = searchResult.filter(function (datum) {
+                            return datum.key === key;
+                        });
+                        if (!matches.length) {
+                            searchResult.push({pollID: key, poll: fireFactory.getSpecificPollData(key)});
+                        }
+
+                    }
+
+                });
+
+                console.log( " *** " + searchResult);
+
+                $scope.currentPolls = searchResult;
+
+            }
+            else {
+                $scope.getCurrentPolls();
+            }
+        });
+
         $scope.pieChartGaugeOptions = {thickness: 30, mode: "gauge", total: 100};
 
         $scope.pieChartOptions = {thickness: 30};
-
-        $scope.deleteThisData = [
-            {data: 1, color: '#F44336', label: 'Toyota'},
-            {data: 2, color: '#03A9F4', label: 'Nissan'},
-            {data: 3, color: '#8BC34A', label: 'Hyundai'},
-            {data: 4, color: '#FFEB3B', label: 'Scion'},
-            {data: 4, color: '#009688', label: 'Daihatsu'},
-        ];
 
         $scope.isCreateNewButtonDisabled = function () {
 
@@ -785,9 +815,9 @@ materialAdmin
 
                                     $scope.optionValueArray.push(vValue * 100);
 
-                                } else if (qValue.answerType == "Time") {
+                                } else if (qValue.answerType == "Time" || qValue.answerType == "Date") {
 
-                                    $scope.optionValueArray.push(vValue.getMilliseconds());
+                                    $scope.optionValueArray.push(Date.parse(vValue));
 
                                 } else {
                                     $scope.optionValueArray.push(vValue);
@@ -826,13 +856,13 @@ materialAdmin
 
                                 $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
 
-                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+                                $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toDateString();
 
                             } else if (qValue.answerType == "Time") {
 
                                 $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
 
-                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+                                $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toTimeString();
 
                             } else {
                                 /*alert("WHAT?")*/
@@ -856,7 +886,7 @@ materialAdmin
 
                     });
 
-                    console.log($scope.specificPoll.question[0].result);
+                    console.log($scope.specificPoll.question[0].result[1].value);
 
 
                     $state.go("pages.poll.poll-view-specific.poll-questions");

@@ -89,7 +89,41 @@
 
                     </div>
 
+                    <div ng-if="questions.answerType == 'Date'">
 
+                        <div class="form-group fg-line" ng-repeat="(oId, options) in questions.option">
+
+                            <p>{{options.body}}</p>
+                            <p>{{options.result}}</p>
+
+                            <!--<div class="form-group fg-line">
+
+                                <timepicker ng-model="options.result" minute-step="5"
+                                            show-meridian="false" default-value="00:00"></timepicker>
+
+                            </div>-->
+
+                        </div>
+
+                    </div>
+
+                    <div ng-if="questions.answerType == 'Time'">
+
+                        <div class="form-group fg-line" ng-repeat="(oId, options) in questions.option">
+
+                            <p>{{options.body}}</p>
+                            <p>{{options.result}}</p>
+
+                            <!--<div class="form-group fg-line">
+
+                                <timepicker ng-model="options.result" minute-step="5"
+                                            show-meridian="false" default-value="00:00"></timepicker>
+
+                            </div>-->
+
+                        </div>
+
+                    </div>
 
                     <div class="clearfix"></div>
 
