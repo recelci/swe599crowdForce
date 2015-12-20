@@ -68,7 +68,7 @@ materialAdmin
     // Base controller for common functions
     // =========================================================================
 
-    .controller('materialadminCtrl', function ($timeout, $state, growlService, $window, fireFactory, $rootScope) {
+    .controller('materialadminCtrl', function ($timeout, $state, growlService, $window, fireFactory, $rootScope, currentPoll) {
 
         // Detact Mobile Browser
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -112,6 +112,12 @@ materialAdmin
         this.wallVideo = false;
         this.wallLink = false;
 
+
+        //Dashboard
+
+        this.dashboardData = currentPoll.index();
+
+        /*this.pollDashboardTotalCount = 125;*/
 
         //Authorization Control
         this.authData = fireFactory.firebaseRef().getAuth();
@@ -446,6 +452,11 @@ materialAdmin
                 password: $rootScope.model.user.password
             };
             fireFactory.firebaseRef().createUser(registerData, $scope.registerCB);
+
+            fireFactory.userCountReference().transaction(function(currentVal){
+                return (currentVal || 0) + 1;
+            });
+
         };
         $scope.getName = function (authData) {
             return authData.replace(/@.*/, '');
@@ -556,7 +567,7 @@ materialAdmin
 
                 });
 
-                console.log( " *** " + searchResult);
+                console.log(" *** " + searchResult);
 
                 $scope.currentPolls = searchResult;
 
@@ -654,6 +665,8 @@ materialAdmin
             var pollJSON = angular.fromJson(angular.toJson($rootScope.model.poll));
             var fireBaseObj = fireFactory.pollReference().push(pollJSON);
 
+            $scope.updateIndex ($scope.pollQuestions.length);
+
             $scope.clearForm();
 
             $scope.userPollCreateInteraction(fireBaseObj.key());
@@ -687,6 +700,18 @@ materialAdmin
             $rootScope.model.pollQuestion = {};
             $rootScope.model.pollQuestionOption = {};
             $scope.specificPoll = {};
+
+        };
+
+        $scope.updateIndex = function (questionCount){
+
+            fireFactory.pollCountReference().transaction(function(currentVal){
+                return (currentVal || 0) + 1;
+            });
+
+            fireFactory.questionCountReference().transaction(function(currentVal){
+                return (currentVal || 0) + questionCount;
+            });
 
         };
 
@@ -724,7 +749,6 @@ materialAdmin
 
             $scope.userPollParticipateInteraction($scope.specificPollId);
 
-
         };
 
         $scope.userPollParticipateInteraction = function (pollId) {
@@ -739,6 +763,10 @@ materialAdmin
             $rootScope.currentUserReference.currentUserData.data.participatedPolls[pollId] = true;
 
             $rootScope.currentUserReference.currentUserData.$save();
+
+            fireFactory.answerCountReference().transaction(function(currentVal){
+                return (currentVal || 0) + 1;
+            });
 
         };
 
@@ -1255,6 +1283,37 @@ materialAdmin
                 return helperFactory.firebaseRef().child('data');
             };
 
+            //DASHBOARD
+
+            helperFactory.pollIndexReference = function () {
+
+                return helperFactory.firebaseRef().child('Index');
+
+            };
+
+            helperFactory.pollCountReference = function () {
+
+                return helperFactory.pollIndexReference().child('pollCount');
+
+            };
+
+            helperFactory.questionCountReference = function () {
+
+                return helperFactory.pollIndexReference().child('questionCount');
+
+            };
+
+            helperFactory.answerCountReference = function () {
+
+                return helperFactory.pollIndexReference().child('answerCount');
+
+            };
+
+            helperFactory.userCountReference = function () {
+
+                return helperFactory.pollIndexReference().child('userCount');
+
+            };
 
             //POLL
             helperFactory.pollReference = function () {
@@ -1307,6 +1366,10 @@ materialAdmin
 
             helperFactory.removeSpecificPollData = function (pollID) {
                 return $firebaseObject(helperFactory.specificPollReference(pollID).remove());
+            };
+
+            helperFactory.getIndexData = function () {
+                return $firebaseObject(helperFactory.pollIndexReference());
             };
 
             return helperFactory;
@@ -1375,6 +1438,12 @@ materialAdmin
 
         currentPollsService.list = function () {
             return fireFactory.getPollData();
+        };
+
+        currentPollsService.index = function () {
+
+            return fireFactory.getIndexData();
+
         };
 
         currentPollsService.listPublished = function () {

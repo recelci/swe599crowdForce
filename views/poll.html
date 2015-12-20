@@ -15,7 +15,7 @@
         </ul>
     </div>
 
-    <div class = "card-body">
+    <div class="card-body">
 
         <label>Show my polls :</label>
         <div class="toggle-switch">
@@ -47,7 +47,7 @@
                                 {{ poll.endDate }}
                             </td>
 
-                            <td data-title="'Stat'" sortable="'readyToPublish'" ng-if = "viewMyPolls == 1">
+                            <td data-title="'Stat'" sortable="'readyToPublish'" ng-if="viewMyPolls == 1">
                                 <i class="zmdi zmdi-assignment-alert zmdi-hc-lg" ng-if="!poll.readyToPublish"></i>
                                 <i class="zmdi zmdi-assignment-check zmdi-hc-lg" ng-if="poll.readyToPublish"></i>
                             </td>
@@ -72,7 +72,7 @@
                             <td data-title="'Ends'" sortable="'endDate'">
                                 {{ poll.poll.endDate }}
                             </td>
-                            <td data-title="'Stat'" sortable="'readyToPublish'" ng-if = "viewMyPolls == 1">
+                            <td data-title="'Stat'" sortable="'readyToPublish'" ng-if="viewMyPolls == 1">
                                 <i class="zmdi zmdi-assignment-alert zmdi-hc-lg" ng-if="!poll.poll.readyToPublish"></i>
                                 <i class="zmdi zmdi-assignment-check zmdi-hc-lg" ng-if="poll.poll.readyToPublish"></i>
                                 {{ poll.pollID }}
@@ -87,7 +87,36 @@
 
         <div class="pm-body clearfix">
 
+            <div class="pmb-block" ng-if="isCreateNewButtonDisabled() == false">
+                <div class="pmbb-header">
+                    <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Poll Details</h2>
+                </div>
+
+                <div class="pmbb-body p-l-30">
+
+                    <div class="form-group">
+                        <div class="fg-line">
+
+                            <dl class="dl-horizontal">
+                                <dt>Title</dt>
+                                <dd>{{ specificPoll.title }}</dd>
+                            </dl>
+
+                            <dl class="dl-horizontal">
+                                <dt>Description</dt>
+                                <dd>{{ specificPoll.description }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
             <data ui-view></data>
+
+
         </div>
     </div>
 </div>
