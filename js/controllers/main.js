@@ -348,25 +348,32 @@ materialAdmin
     // Profile
     //=================================================
 
-    .controller('profileCtrl', function (growlService) {
+    .controller('profileCtrl', function (growlService, $rootScope) {
 
         //Get Profile Information from profileService Service
 
-        //User
-        this.profileSummary = "Sed eu est vulputate, fringilla ligula ac, maximus arcu. Donec sed felis vel magna mattis ornare ut non turpis. Sed id arcu elit. Sed nec sagittis tortor. Mauris ante urna, ornare sit amet mollis eu, aliquet ac ligula. Nullam dolor metus, suscipit ac imperdiet nec, consectetur sed ex. Sed cursus porttitor leo.";
+        /*$rootScope.currentUserReference.currentUserData.$loaded().then(function (loadedData) {
 
-        this.fullName = "Osman Emre Ercin";
+         });*/
+
+        //User
+
+        /*this.pristineState = angular.copy($rootScope.currentUserReference.currentUserData);*/
+
+        this.name = $rootScope.currentUserReference.currentUserData.userName;
+        this.lastName = $rootScope.currentUserReference.currentUserData.userLastName;
         this.gender = "Male";
         this.birthDay = "23/06/1988";
         this.martialStatus = "Single";
         this.mobileNumber = "00971123456789";
-        this.emailAddress = "osman@gmail.com";
+        this.emailAddress = $rootScope.currentUserReference.currentUserData.email;
         this.twitter = "@osman";
         this.twitterUrl = "twitter.com/osman";
         this.skype = "osman";
         this.addressSuite = "Umraniye";
         this.addressCity = "Istanbul";
         this.addressCountry = "Turkey";
+        this.role = $rootScope.currentUserReference.currentUserData.role;
 
         //Edit
         this.editSummary = 0;
@@ -375,11 +382,28 @@ materialAdmin
 
         this.submit = function (item, message) {
             if (item === 'profileSummary') {
+
+
+                $rootScope.currentUserReference.currentUserData.$save().then(function () {
+
+                    alert("Profile updated!");
+
+                });
+
                 this.editSummary = 0;
+
             }
 
             if (item === 'profileInfo') {
+
+                $rootScope.currentUserReference.currentUserData.$save().then(function () {
+
+                    alert("Profile updated!");
+
+                });
+
                 this.editInfo = 0;
+
             }
 
             if (item === 'profileContact') {
@@ -387,7 +411,77 @@ materialAdmin
             }
 
             growlService.growl(message + ' has updated Successfully!', 'inverse');
-        }
+        };
+
+        this.cancel = function (item, message) {
+            if (item === 'profileSummary') {
+
+                this.editSummary = 0;
+            }
+
+            if (item === 'profileInfo') {
+
+                /*$rootScope.currentUserReference.currentUserData = this.pristineState;*/
+
+                $rootScope.currentUserReference.currentUserData.$setPristine();
+
+                this.editInfo = 0;
+
+            }
+
+            if (item === 'profileContact') {
+                this.editContact = 0;
+            }
+
+            growlService.growl(message + ' has updated Successfully!', 'inverse');
+        };
+
+    })
+
+
+    .controller('PictureUploadCtrl', function ($scope, resizeService, $rootScope) {
+
+        $scope.image = null;
+        $scope.imageFileName = '';
+        $scope.uploadImage = function () {
+
+            $scope.fileReader = new FileReader();
+            $scope.fileReader.readAsDataURL(this.$flow.files[0].file);
+            $scope.fileReader.onloadend = function () {
+                resizeService.resizeImage($scope.fileReader.result, {
+                    size: 100,
+                    sizeScale: 'ko',
+                    otherOptions: '',
+                    height: 256,
+                    width: 256
+                }, function (err, image) {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                    $scope.bigImage = image;
+                    $rootScope.currentUserReference.currentUserData.userImage = $scope.bigImage;
+                    $rootScope.currentUserReference.currentUserData.$save();
+                });
+                resizeService.resizeImage($scope.fileReader.result, {
+                    size: 100,
+                    sizeScale: 'ko',
+                    otherOptions: '',
+                    height: 48,
+                    width: 48
+                }, function (err, image) {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                    $scope.smallImage = image;
+                    $rootScope.currentUserReference.currentUserData.userImageSmall = $scope.smallImage;
+                    $rootScope.currentUserReference.currentUserData.$save();
+                });
+            };
+
+        };
+
 
     })
 
@@ -453,7 +547,7 @@ materialAdmin
             };
             fireFactory.firebaseRef().createUser(registerData, $scope.registerCB);
 
-            fireFactory.userCountReference().transaction(function(currentVal){
+            fireFactory.userCountReference().transaction(function (currentVal) {
                 return (currentVal || 0) + 1;
             });
 
@@ -524,6 +618,10 @@ materialAdmin
 
         $rootScope.searchTerm = '';
 
+        $scope.pollMainPageView = '';
+
+        $scope.isContinueFromTemplate = false;
+
         $scope.getCurrentPolls = function () {
 
             if ($scope.viewMyPolls == 1) {
@@ -533,6 +631,16 @@ materialAdmin
                 $scope.currentPolls = currentPoll.listPublished();
                 $scope.searchListPolls = currentPoll.listPublished();
             }
+
+            /*currentPoll.getLastPublishedPoll().$loaded().then(function (loadedData) {
+
+             angular.forEach(loadedData, function (value, key) {
+
+             $scope.pollMainPageView = key;
+
+             });
+
+             });*/
 
         };
 
@@ -665,23 +773,29 @@ materialAdmin
             var pollJSON = angular.fromJson(angular.toJson($rootScope.model.poll));
             var fireBaseObj = fireFactory.pollReference().push(pollJSON);
 
-            $scope.updateIndex ($scope.pollQuestions.length);
+            $scope.updateIndex($scope.pollQuestions.length);
 
             $scope.clearForm();
 
             $scope.userPollCreateInteraction(fireBaseObj.key());
 
-            if ($scope.specificPollId) {
+            if ($scope.isSpecificPollPublished == false && $scope.specificPollId) {
 
-                fireFactory.specificPollReference($scope.specificPollId).remove(function (error) {
-
-                    alert(error ? "Error occured!" : "Your poll is published!");
-
-                });
+                $scope.removePollTemplate($scope.specificPollId)
 
             }
 
             $scope.viewSpecificPoll(fireBaseObj.key());
+        };
+
+        $scope.removePollTemplate = function (pollId) {
+
+            fireFactory.specificPollReference(pollId).remove(function (error) {
+
+                alert(error ? "Error occured!" : "Your poll is deleted!");
+
+            });
+
         };
 
         $scope.saveTemplate = function () {
@@ -703,13 +817,13 @@ materialAdmin
 
         };
 
-        $scope.updateIndex = function (questionCount){
+        $scope.updateIndex = function (questionCount) {
 
-            fireFactory.pollCountReference().transaction(function(currentVal){
+            fireFactory.pollCountReference().transaction(function (currentVal) {
                 return (currentVal || 0) + 1;
             });
 
-            fireFactory.questionCountReference().transaction(function(currentVal){
+            fireFactory.questionCountReference().transaction(function (currentVal) {
                 return (currentVal || 0) + questionCount;
             });
 
@@ -764,7 +878,7 @@ materialAdmin
 
             $rootScope.currentUserReference.currentUserData.$save();
 
-            fireFactory.answerCountReference().transaction(function(currentVal){
+            fireFactory.answerCountReference().transaction(function (currentVal) {
                 return (currentVal || 0) + 1;
             });
 
@@ -791,150 +905,155 @@ materialAdmin
 
             $scope.specificPoll = currentPoll.get(pollId);
 
+            $scope.isContinueFromTemplate = false;
+
             $scope.specificPoll.$loaded().then(function (loadedData) {
 
-                if ($scope.specificPoll.readyToPublish == false) {
+                angular.forEach(loadedData.question, function (qValue, qKey) {
 
-                    pollQuestion.clear();
+                    angular.forEach(qValue.option, function (oValue, oKey) {
 
-                    /*$rootScope.model.poll = $scope.specificPoll;*/
+                        $scope.optionValueArray = [];
+                        $scope.specificPoll.question[qKey].result = [];
 
-                    angular.forEach(loadedData.question, function (qValue, qKey) {
+                        angular.forEach(oValue.value, function (vValue, vKey) {
 
-                        angular.forEach(qValue.option, function (oValue, oKey) {
-
-                            pollQuestionOption.add({
-                                body: oValue.body,
-                                value: ""
-                            });
-
-                            $rootScope.model.pollQuestionOption = {};
-
-                        });
-
-                        pollQuestion.add({
-                            body: qValue.body,
-                            answerType: qValue.answerType,
-                            option: $scope.pollQuestionOptions.slice()
-                        });
-
-                        $rootScope.model.pollQuestion = {};
-                        pollQuestionOption.clear();
-
-                    });
-
-                    $state.go("pages.poll.poll-create-new");
-
-                }
-                /*Calculating the result for the poll*/
-                else {
-
-                    angular.forEach(loadedData.question, function (qValue, qKey) {
-
-                        angular.forEach(qValue.option, function (oValue, oKey) {
-
-                            $scope.optionValueArray = [];
-                            $scope.specificPoll.question[qKey].result = [];
-
-                            angular.forEach(oValue.value, function (vValue, vKey) {
-
-
-                                if (qValue.answerType == "Percent") {
-
-                                    $scope.optionValueArray.push(vValue * 100);
-
-                                } else if (qValue.answerType == "Time" || qValue.answerType == "Date") {
-
-                                    $scope.optionValueArray.push(Date.parse(vValue));
-
-                                } else {
-                                    $scope.optionValueArray.push(vValue);
-                                }
-
-
-                            });
 
                             if (qValue.answerType == "Percent") {
 
-                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+                                $scope.optionValueArray.push(vValue * 100);
 
-                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+                            } else if (qValue.answerType == "Time" || qValue.answerType == "Date") {
 
-                            } else if (qValue.answerType == "Number") {
-
-                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
-
-                            } else if (qValue.answerType == "Currency") {
-
-                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
-
-                            } else if (qValue.answerType == "Radio") {
-
-                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
-
-                            } else if (qValue.answerType == "Multiple-Choice") {
-
-                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
-
-                            } else if (qValue.answerType == "Date") {
-
-                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-                                $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toDateString();
-
-                            } else if (qValue.answerType == "Time") {
-
-                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-                                $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toTimeString();
+                                $scope.optionValueArray.push(Date.parse(vValue));
 
                             } else {
-                                /*alert("WHAT?")*/
+                                $scope.optionValueArray.push(vValue);
                             }
 
-                            console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
 
                         });
 
+                        if (qValue.answerType == "Percent") {
 
-                        angular.forEach(qValue.option, function (oValue, oKey) {
+                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
 
-                            $scope.specificPoll.question[qKey].result.push({
-                                value: oValue.result,
-                                color: getRandomColor(),
-                                label: oValue.body
-                            })
+                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
 
-                        });
+                        } else if (qValue.answerType == "Number") {
 
+                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+                        } else if (qValue.answerType == "Currency") {
+
+                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+                        } else if (qValue.answerType == "Radio") {
+
+                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
+
+                        } else if (qValue.answerType == "Multiple-Choice") {
+
+                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
+
+                        } else if (qValue.answerType == "Date") {
+
+                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                            $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toDateString();
+
+                        } else if (qValue.answerType == "Time") {
+
+                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                            $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toTimeString();
+
+                        } else {
+                            /*alert("WHAT?")*/
+                        }
+
+                        console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
 
                     });
 
-                    console.log($scope.specificPoll.question[0].result[1].value);
+
+                    angular.forEach(qValue.option, function (oValue, oKey) {
+
+                        $scope.specificPoll.question[qKey].result.push({
+                            value: oValue.result,
+                            color: getRandomColor(),
+                            label: oValue.body
+                        })
+
+                    });
 
 
-                    $state.go("pages.poll.poll-view-specific.poll-questions");
-                }
+                });
+
+                /*console.log($scope.specificPoll.question[0].result[1].value);*/
+
+
+                $state.go("pages.poll.poll-view-specific.poll-questions");
 
             });
 
         };
 
-        /*$scope.continueFromTemplate = function (pollId){
+        /*$scope.viewSpecificPoll($scope.pollMainPageView);*/
 
-         $scope.specificPoll = {};
-         var pollTemp = currentPoll.get(pollId);
-         pollTemp.$bindTo($scope, "specificPoll")
-         .then(function () {
+        $scope.continueFromTemplate = function (pollId) {
+
+            $scope.isContinueFromTemplate = true;
+
+            $scope.specificPollId = pollId;
+
+            $scope.specificPoll = currentPoll.get(pollId);
+
+            $scope.specificPoll.$loaded().then(function (loadedData) {
+
+                $scope.isSpecificPollPublished = loadedData.readyToPublish;
+
+                $rootScope.model.poll.title = loadedData.title;
+
+                $rootScope.model.poll.description = loadedData.description;
+
+                pollQuestion.clear();
+
+                angular.forEach(loadedData.question, function (qValue, qKey) {
+
+                    angular.forEach(qValue.option, function (oValue, oKey) {
+
+                        pollQuestionOption.add({
+                            body: oValue.body,
+                            value: ""
+                        });
+
+                        $rootScope.model.pollQuestionOption = {};
+
+                    });
+
+                    pollQuestion.add({
+                        body: qValue.body,
+                        answerType: qValue.answerType,
+                        option: $scope.pollQuestionOptions.slice()
+                    });
+
+                    $rootScope.model.pollQuestion = {};
+                    pollQuestionOption.clear();
+
+                });
+
+                $state.go("pages.poll.poll-create-new");
 
 
-         });
+            });
 
-         };*/
+
+        };
 
         $scope.calculateAverage = function (data) {
 
@@ -1287,7 +1406,7 @@ materialAdmin
 
             helperFactory.pollIndexReference = function () {
 
-                return helperFactory.firebaseRef().child('Index');
+                return helperFactory.firebaseRef().child('index');
 
             };
 
@@ -1322,6 +1441,10 @@ materialAdmin
 
             helperFactory.publishedPollReference = function () {
                 return helperFactory.pollReference().orderByChild("readyToPublish").equalTo(true);
+            };
+
+            helperFactory.lastPublishedPollReference = function () {
+                return helperFactory.publishedPollReference().limitToLast(1);
             };
 
             helperFactory.usersPollReference = function (userId) {
@@ -1370,6 +1493,10 @@ materialAdmin
 
             helperFactory.getIndexData = function () {
                 return $firebaseObject(helperFactory.pollIndexReference());
+            };
+
+            helperFactory.getLastPublishedPoll = function () {
+                return $firebaseObject(helperFactory.lastPublishedPollReference());
             };
 
             return helperFactory;
@@ -1448,6 +1575,10 @@ materialAdmin
 
         currentPollsService.listPublished = function () {
             return fireFactory.getPublishedPollData();
+        };
+
+        currentPollsService.getLastPublishedPoll = function () {
+            return fireFactory.getLastPublishedPoll();
         };
 
         currentPollsService.listUserPoll = function (userId) {

@@ -98,7 +98,7 @@
 
         <div class="col-sm-1 form-group">
             <div class="fg-line">
-                <button class="btn btn-success btn-lg" ng-click="addOption()"
+                <button class="btn btn-success btn-lg" ng-click="!$root.model.pollQuestionOption.body || addOption()"
                         ng-class="{disabled: !$root.model.pollQuestionOption.body}">
                     <i class="zmdi zmdi-plus"></i></button>
             </div>

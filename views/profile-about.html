@@ -21,13 +21,15 @@
             {{ pctrl.profileSummary }}
         </div>
 
-        <form data-ng-submit="pctrl.submit('profileSummary', 'Profile Summary')" class="pmbb-edit" data-ng-if="pctrl.editSummary === 1">
+        <form data-ng-submit="pctrl.submit('profileSummary', 'Profile Summary')" class="pmbb-edit"
+              data-ng-if="pctrl.editSummary === 1">
             <div class="fg-line">
-                <textarea data-ng-model="pctrl.profileSummary" class="form-control" rows="5" placeholder="Summary...">Sed eu est vulputate, fringilla ligula ac, maximus arcu. Donec sed felis vel magna mattis ornare ut non turpis. Sed id arcu elit. Sed nec sagittis tortor. Mauris ante urna, ornare sit amet mollis eu, aliquet ac ligula. Nullam dolor metus, suscipit ac imperdiet nec, consectetur sed ex. Sed cursus porttitor leo.</textarea>
+                <textarea data-ng-model="pctrl.profileSummary" class="form-control" rows="5"
+                          placeholder="Summary..."></textarea>
             </div>
             <div class="m-t-10">
                 <button class="btn btn-primary btn-sm" type="submit">Save</button>
-                <button class="btn btn-link btn-sm" data-ng-click="pctrl.editSummary = 0" >Cancel</button>
+                <button class="btn btn-link btn-sm" data-ng-click="pctrl.editSummary = 0">Cancel</button>
             </div>
         </form>
     </div>
@@ -53,79 +55,73 @@
     </div>
     <div class="pmbb-body p-l-30">
         <div class="pmbb-view" data-ng-if="pctrl.editInfo === 0">
+
             <dl class="dl-horizontal">
-                <dt>Full Name</dt>
-                <dd>{{ pctrl.fullName }}</dd>
+                <dt>Name</dt>
+                <dd>{{ mactrl.currentUserData.userName }}</dd>
             </dl>
+
             <dl class="dl-horizontal">
-                <dt>Gender</dt>
-                <dd>{{ pctrl.gender }}</dd>
+                <dt>Last Name</dt>
+                <dd>{{ mactrl.currentUserData.userLastName }}</dd>
             </dl>
+
             <dl class="dl-horizontal">
-                <dt>Birthday</dt>
-                <dd>{{ pctrl.birthDay }}</dd>
+                <dt>Role</dt>
+                <dd>{{ mactrl.currentUserData.role }}</dd>
             </dl>
-            <dl class="dl-horizontal">
-                <dt>Martial Status</dt>
-                <dd>{{ pctrl.martialStatus }}</dd>
-            </dl>
+
         </div>
 
-        <form data-ng-submit="pctrl.submit('profileInfo', 'Profile Information')" class="pmbb-edit" data-ng-if="pctrl.editInfo === 1">
+        <div class="pmbb-edit" data-ng-if="pctrl.editInfo === 1">
             <dl class="dl-horizontal">
-                <dt class="p-t-10">Full Name</dt>
+
+                <dt class="p-t-10">Name</dt>
+
                 <dd>
+
                     <div class="fg-line">
-                        <input data-ng-model="pctrl.fullName" type="text" class="form-control" value="{{ pctrl.fullName }}" placeholder="eg. Mallinda Hollaway">
+                        <input data-ng-model="mactrl.currentUserData.userName" type="text" class="form-control"
+                               placeholder="eg. Albert Ali">
                     </div>
 
                 </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Gender</dt>
+
+                <dt class="p-t-10">Last Name</dt>
                 <dd>
+
                     <div class="fg-line">
-                        <select class="form-control">
-                            <option>Female</option>
-                            <option>Male</option>
-                            <option>Other</option>
-                        </select>
+                        <input data-ng-model="mactrl.currentUserData.userLastName" type="text" class="form-control"
+                               placeholder="eg. Salah">
                     </div>
+
                 </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Birthday</dt>
-                <dd>
-                    <div class="dtp-container dropdown fg-line">
-                        <input type='text' class="form-control" data-dt-picker="DD/MM/YYYY" dropdown-toggle placeholder="eg. 23/06/1988">
-                    </div>
-                </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Martial Status</dt>
-                <dd>
-                    <div class="fg-line">
-                        <select class="form-control">
-                            <option>Single</option>
-                            <option>Married</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                </dd>
+
+                <br>
+
+                <dl class="dl-horizontal">
+                    <dt>Role</dt>
+                    <dd>{{ mactrl.currentUserData.role }}</dd>
+                </dl>
             </dl>
 
             <div class="m-t-30">
-                <button class="btn btn-primary btn-sm" type="submit">Save</button>
-                <button class="btn btn-link btn-sm" data-ng-click="pctrl.editInfo = 0" >Cancel</button>
+                <button class="btn btn-primary btn-sm"
+                        data-ng-click="pctrl.submit('profileInfo', 'Profile Information')">Save
+                </button>
+                <button class="btn btn-link btn-sm" data-ng-click="pctrl.cancel('profileInfo', 'Profile Information')">
+                    Cancel
+                </button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
 
 <div class="pmb-block">
+
     <div class="pmbb-header">
-        <h2><i class="zmdi zmdi-phone m-r-5"></i> Contact Information</h2>
+        <h2><i class="zmdi zmdi-phone m-r-5"></i> Privacy</h2>
 
         <ul class="actions" data-ng-if="pctrl.editContact === 0">
             <li class="dropdown" dropdown>
@@ -141,64 +137,89 @@
             </li>
         </ul>
     </div>
+
     <div class="pmbb-body p-l-30">
         <div class="pmbb-view" data-ng-if="pctrl.editContact === 0">
-            <dl class="dl-horizontal">
-                <dt>Mobile Phone</dt>
-                <dd>{{ pctrl.mobileNumber }}</dd>
-            </dl>
+
             <dl class="dl-horizontal">
                 <dt>Email Address</dt>
-                <dd>{{ pctrl.emailAddress }}</dd>
+                <dd>{{ mactrl.currentUserData.email }}</dd>
             </dl>
+
             <dl class="dl-horizontal">
-                <dt>Twitter</dt>
-                <dd>{{ pctrl.twitter }}</dd>
+                <dt>Password</dt>
+                <dd>{{ mactrl.currentUserData.password }}</dd>
             </dl>
-            <dl class="dl-horizontal">
-                <dt>Skype</dt>
-                <dd>{{ pctrl.skype }}</dd>
-            </dl>
+
         </div>
 
-        <form data-ng-submit="pctrl.submit('profileContact', 'Profile Contact Information')" class="pmbb-edit" data-ng-if="pctrl.editContact === 1">
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Mobile Phone</dt>
-                <dd>
-                    <div class="fg-line">
-                        <input data-ng-model="pctrl.mobileNumber" type="text" class="form-control" placeholder="eg. 00971 12345678 9">
-                    </div>
-                </dd>
-            </dl>
+        <form data-ng-submit="pctrl.submit('profileContact', 'Profile Contact Information')" class="pmbb-edit"
+              data-ng-if="pctrl.editContact === 1">
+
             <dl class="dl-horizontal">
                 <dt class="p-t-10">Email Address</dt>
                 <dd>
                     <div class="fg-line">
-                        <input data-ng-model="pctrl.emailAddress" type="email" class="form-control" placeholder="eg. malinda.h@gmail.com">
+                        <input data-ng-model="mactrl.currentUserData.email" type="email" class="form-control"
+                               placeholder="eg. osmanemreercin@gmail.com">
                     </div>
                 </dd>
             </dl>
+
             <dl class="dl-horizontal">
-                <dt class="p-t-10">Twitter</dt>
+                <dt class="p-t-10">Password</dt>
                 <dd>
                     <div class="fg-line">
-                        <input data-ng-model="pctrl.twitter" type="text" class="form-control" placeholder="eg. @malinda">
-                    </div>
-                </dd>
-            </dl>
-            <dl class="dl-horizontal">
-                <dt class="p-t-10">Skype</dt>
-                <dd>
-                    <div class="fg-line">
-                        <input data-ng-model="pctrl.skype" type="text" class="form-control" placeholder="eg. malinda.hollaway">
+                        <input data-ng-model="mactrl.currentUserData.password" type="text" class="form-control">
                     </div>
                 </dd>
             </dl>
 
             <div class="m-t-30">
                 <button class="btn btn-primary btn-sm" type="submit">Save</button>
-                <button class="btn btn-link btn-sm" data-ng-click="pctrl.editContact = 0" >Cancel</button>
+                <button class="btn btn-link btn-sm" data-ng-click="pctrl.cancel()">Cancel</button>
             </div>
         </form>
     </div>
+
+
+    <div class="pmbb-body p-l-30">
+        <div flow-init="{singleFile:true}" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+             class="ng-scope" ng-controller="PictureUploadCtrl">
+            <dt class="p-t-10">
+                <a name="image-example" class="anchor" href="#image-example"><span
+                        class="octicon octicon-link"></span></a>Single Image upload
+            </dt>
+            <div class="thumbnail ng-hide col-sm-3" ng-show="!$flow.files.length">
+                <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="thumbnail col-sm-12" ng-show="$flow.files.length">
+                <img flow-img="$flow.files[0]">
+            </div>
+
+            <div>
+                <span class="btn btn-primary ng-hide" ng-show="!$flow.files.length"
+                      flow-btn="">Select image<input type="file" style="visibility: hidden; position: absolute;"></span>
+                <button class="btn btn-primary" ng-click="uploadImage()">Upload</button>
+
+                <span class="btn btn-info" ng-show="$flow.files.length" flow-btn="">Change
+                    <input type="file" style="visibility: hidden; position: absolute;"></span>
+
+                <span class="btn btn-danger" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</span>
+            </div>
+
+            <p>
+                Only PNG,GIF,JPG,JEPG files allowed.
+            </p>
+
+            <img ng-src="{{bigImage}}">
+
+            <img ng-src="{{smallImage}}">
+        </div>
+    </div>
+
+
 </div>
