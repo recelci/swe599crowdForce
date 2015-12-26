@@ -51,10 +51,10 @@
             class="zmdi zmdi-arrow-forward"></i></a>
 
     <!--<ul class="login-navigation">-->
-        <!--<li data-block="#l-register" class="bgm-red" data-ng-click="lctrl.login = 0; lctrl.register = 1">Register</li>-->
-        <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.login = 0; lctrl.forgot = 1">Forgot-->
-            <!--Password?-->
-        <!--</li>-->
+    <!--<li data-block="#l-register" class="bgm-red" data-ng-click="lctrl.login = 0; lctrl.register = 1">Register</li>-->
+    <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.login = 0; lctrl.forgot = 1">Forgot-->
+    <!--Password?-->
+    <!--</li>-->
     <!--</ul>-->
 
     <ul class="login-navigation">
@@ -75,8 +75,13 @@
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
 
-        <div class="fg-line">
-            <input type="text" ng-model="$root.model.user.role" class="form-control" placeholder="Role">
+
+        <div class="select">
+
+            <select class="form-control" data-ng-model="$root.model.user.role" tabindex="4"
+                    ng-options="roles for (rId, roles) in userRegisterRoles">
+            </select>
+
         </div>
     </div>
 
@@ -110,10 +115,10 @@
             class="zmdi zmdi-arrow-forward"></i></a>
 
     <!--<ul class="login-navigation">-->
-        <!--<li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.register = 0; lctrl.login = 1">Login</li>-->
-        <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">-->
-            <!--Forgot Password?-->
-        <!--</li>-->
+    <!--<li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.register = 0; lctrl.login = 1">Login</li>-->
+    <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">-->
+    <!--Forgot Password?-->
+    <!--</li>-->
     <!--</ul>-->
 
     <ul class="login-navigation">
@@ -133,8 +138,7 @@
 <!-- Forgot Password -->
 <div class="lc-block" id="l-forget-password" data-ng-class="{ 'toggled': lctrl.forgot === 1 }"
      data-ng-if="lctrl.forgot === 1">
-    <p class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur commodo
-        lorem fringilla enim feugiat commodo sed ac lacus.</p>
+    <p class="text-left">We will send your password to your e-mail address.</p>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
@@ -248,6 +252,7 @@
 <![endif]-->
 
 <!-- App level -->
+
 <script src="js/app.js"></script>
 <script src="js/config.js"></script>
 <script src="js/controllers/main.js"></script>

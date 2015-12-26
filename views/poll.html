@@ -7,7 +7,7 @@
         </h2>
 
         <button class="btn btn-success btn-icon-text pull-right btn-wave"
-                ng-click="isCreateNewButtonDisabled() || (specificPollId = undefined) "
+                ng-click="isCreateNewButtonDisabled() || (specificPollId = undefined); clearForm() "
                 data-ui-sref="pages.poll.poll-create-new"
                 ng-class="{disabled: isCreateNewButtonDisabled()}"><i
                 class="zmdi zmdi-plus-box"></i> Create New Poll
@@ -36,17 +36,12 @@
 
                         <tr ng-repeat="(pollID, poll) in currentPolls">
 
-                            <td data-title="'Status'" sortable="'isParticipated'">
+                            <td data-title="" sortable="'isParticipated'">
 
-                                <ul class="actions pull-left">
-
-                                    <i class="zmdi zmdi-assignment-alert zmdi-hc-lg"
-                                       ng-if="!poll.readyToPublish && viewMyPolls == 1"></i>
-                                    <i class="zmdi zmdi-assignment-check zmdi-hc-lg"
-                                       ng-if="poll.readyToPublish && viewMyPolls == 1"></i>
-                                    <i class="zmdi zmdi-more-vert" ng-if="viewMyPolls == 0"></i>
-
-                                </ul>
+                                    <i class="zmdi zmdi-notifications-none zmdi-hc-lg"
+                                       ng-if="!isParticipated(pollID)"></i>
+                                    <i class="zmdi zmdi-check-all zmdi-hc-lg"
+                                       ng-if="isParticipated(pollID)"></i>
 
                             </td>
 
@@ -143,6 +138,15 @@
 
                         <tr ng-repeat="poll in currentPolls" ng-click="viewSpecificPoll(poll.pollID)">
 
+                            <td data-title="" sortable="'isParticipated'">
+
+                                <i class="zmdi zmdi-notifications-none zmdi-hc-lg"
+                                   ng-if="!isParticipated(poll.pollID)"></i>
+                                <i class="zmdi zmdi-check-all zmdi-hc-lg"
+                                   ng-if="isParticipated(poll.pollID)"></i>
+
+                            </td>
+
                             <td data-title="'Title'" sortable="'title'">
                                 {{ poll.poll.title | limitTo: 25 }} {{poll.title.length > 25 ? '...' : ''}}
                             </td>
@@ -194,7 +198,7 @@
 
         <div class="pm-body clearfix">
 
-            <div class="pmb-block" ng-if="isCreateNewButtonDisabled() == false">
+            <div class="pmb-block" ng-if="isCreateNewPage() == false">
 
                 <div class="pmbb-header">
 
@@ -238,6 +242,16 @@
                             <dl class="dl-horizontal">
                                 <dt>Description</dt>
                                 <dd>{{ specificPoll.description }}</dd>
+                            </dl>
+
+                            <dl class="dl-horizontal">
+                                <dt>Title</dt>
+                                <dd>{{ specificPoll.createDate }}</dd>
+                            </dl>
+
+                            <dl class="dl-horizontal">
+                                <dt>Description</dt>
+                                <dd>{{ specificPoll.authRole }}</dd>
                             </dl>
                         </div>
                     </div>

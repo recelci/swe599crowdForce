@@ -49,7 +49,7 @@
                 <div class="fg-line" ng-class="{ 'fg-toggled': opened == true }">
                     <input ng-click="open($event, 'opened')" type="text" class="form-control"
                            datepicker-popup="{{format}}" show-weeks="false"
-                           ng-model="$parent.answerValue[questionId][optionId]"
+                           ng-model="answerValue[questionId][optionId]"
                            is-open="opened"
                            min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close"
                            placeholder="End Date" ng-disabled="readOnly">
