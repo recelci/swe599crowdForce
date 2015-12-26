@@ -863,6 +863,8 @@ materialAdmin
 
             $scope.userPollParticipateInteraction($scope.specificPollId);
 
+            $scope.viewSpecificPoll($scope.specificPollId);
+
         };
 
         $scope.userPollParticipateInteraction = function (pollId) {
@@ -997,7 +999,17 @@ materialAdmin
                 /*console.log($scope.specificPoll.question[0].result[1].value);*/
 
 
-                $state.go("pages.poll.poll-view-specific.poll-questions");
+                $scope.specificPollOwner = fireFactory.getUserData(loadedData.owner);
+
+                /*$scope.specificPollOwner.$loaded().then(function (loadedData) {
+
+                    $scope.specificPollOwnerName = loadedData.userName;
+
+
+
+                });*/
+
+                $state.go("pages.poll.poll-view-specific");
 
             });
 
@@ -1068,6 +1080,17 @@ materialAdmin
         $scope.getUrl = function () {
 
             $scope.pollUrl = $location.absUrl();
+
+        };
+
+        $scope.isCurrentUserParticipated = function () {
+
+            if ($scope.specificPollId != null) {
+                if (!$rootScope.currentUserReference.currentUserData.data.participatedPolls) {
+                    return false;
+                }
+                return $rootScope.currentUserReference.currentUserData.data.participatedPolls[$scope.specificPollId];
+            }
 
         }
 

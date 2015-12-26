@@ -7,10 +7,12 @@
 
         <ul class="actions m-t-20 hidden-xs">
 
-            <button class="btn btn-success btn-icon-text pull-right btn-wave" ng-click = "isCreateNewButtonDisabled() || (specificPollId = undefined) " data-ui-sref="pages.poll.poll-create-new"
+            <li class="btn btn-success btn-icon-text pull-right btn-wave"
+                    ng-click="isCreateNewButtonDisabled() || (specificPollId = undefined) "
+                    data-ui-sref="pages.poll.poll-create-new"
                     ng-class="{disabled: isCreateNewButtonDisabled()}"><i
                     class="zmdi zmdi-plus-box"></i> Create New Poll
-            </button>
+            </li>
 
         </ul>
     </div>
@@ -50,10 +52,12 @@
                             <td data-title="'Action'" sortable="'readyToPublish'">
 
                                 <ul class="actions pull-right">
-                                    <li class="dropdown" dropdown >
+                                    <li class="dropdown" dropdown>
                                         <a href="" dropdown-toggle>
-                                            <i class="zmdi zmdi-assignment-alert zmdi-hc-lg" ng-if="!poll.readyToPublish && viewMyPolls == 1"></i>
-                                            <i class="zmdi zmdi-assignment-check zmdi-hc-lg" ng-if="poll.readyToPublish && viewMyPolls == 1"></i>
+                                            <i class="zmdi zmdi-assignment-alert zmdi-hc-lg"
+                                               ng-if="!poll.readyToPublish && viewMyPolls == 1"></i>
+                                            <i class="zmdi zmdi-assignment-check zmdi-hc-lg"
+                                               ng-if="poll.readyToPublish && viewMyPolls == 1"></i>
                                             <i class="zmdi zmdi-more-vert" ng-if="viewMyPolls == 0"></i>
                                         </a>
 
@@ -61,7 +65,8 @@
                                             <li ng-click="continueFromTemplate(pollID)">
                                                 <a href="">Template</a>
                                             </li>
-                                            <li ng-click="removePollTemplate(pollID)" ng-if="!poll.readyToPublish && viewMyPolls == 1">
+                                            <li ng-click="removePollTemplate(pollID)"
+                                                ng-if="!poll.readyToPublish && viewMyPolls == 1">
                                                 <a href="">Delete</a>
                                             </li>
                                         </ul>
@@ -111,8 +116,33 @@
             <div class="pmb-block" ng-if="isCreateNewButtonDisabled() == false">
 
                 <div class="pmbb-header">
-                    <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Poll Details</h2>
+
+                    <div class="col-sm-10">
+                        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Poll Details</h2>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="lv-body pull-right">
+
+                            <div class="lv-item media">
+
+                                <div class="pull-left">
+                                    <img class="lv-img-sm" src="{{specificPollOwner.userImageSmall}}" alt="">
+                                </div>
+
+                                <div class="media-body">
+                                    <div class="lv-title"> {{specificPollOwner.userName}}</div>
+                                    <small class="lv-small"> {{specificPollOwner.role}}</small>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
+
+                <div class="clearfix"></div>
 
                 <div class="pmbb-body p-l-30">
 

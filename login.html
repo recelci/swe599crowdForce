@@ -47,14 +47,25 @@
         </label>
     </div>
 
-    <a href="" class="btn btn-login btn-danger btn-float" data-ng-click="submit()"><i
+    <a href="" class="btn btn-login btn-success btn-float" data-ng-click="submit()"><i
             class="zmdi zmdi-arrow-forward"></i></a>
 
+    <!--<ul class="login-navigation">-->
+        <!--<li data-block="#l-register" class="bgm-red" data-ng-click="lctrl.login = 0; lctrl.register = 1">Register</li>-->
+        <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.login = 0; lctrl.forgot = 1">Forgot-->
+            <!--Password?-->
+        <!--</li>-->
+    <!--</ul>-->
+
     <ul class="login-navigation">
-        <li data-block="#l-register" class="bgm-red" data-ng-click="lctrl.login = 0; lctrl.register = 1">Register</li>
-        <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.login = 0; lctrl.forgot = 1">Forgot
-            Password?
-        </li>
+        <button class="btn btn-primary " data-ng-click="lctrl.login = 0; lctrl.register = 1"><i
+                class="zmdi zmdi-account-add"></i> Register
+        </button>
+
+        <button class="btn btn-danger " data-ng-click="lctrl.login = 0; lctrl.forgot = 1"><i
+                class="zmdi zmdi-key"></i> Forgot My Password
+        </button>
+
     </ul>
 </div>
 
@@ -87,23 +98,36 @@
 
     <div class="clearfix"></div>
 
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" value="">
-            <i class="input-helper"></i>
-            Accept the license agreement
-        </label>
-    </div>
+    <!--<div class="checkbox">-->
+    <!--<label>-->
+    <!--<input type="checkbox" value="">-->
+    <!--<i class="input-helper"></i>-->
+    <!--Accept the license agreement-->
+    <!--</label>-->
+    <!--</div>-->
 
-    <a href="" class="btn btn-login btn-danger btn-float" data-ng-click="submit()"><i
+    <a href="" class="btn btn-login btn-primary btn-float" data-ng-click="submit()"><i
             class="zmdi zmdi-arrow-forward"></i></a>
 
+    <!--<ul class="login-navigation">-->
+        <!--<li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.register = 0; lctrl.login = 1">Login</li>-->
+        <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">-->
+            <!--Forgot Password?-->
+        <!--</li>-->
+    <!--</ul>-->
+
     <ul class="login-navigation">
-        <li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.register = 0; lctrl.login = 1">Login</li>
-        <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">
-            Forgot Password?
-        </li>
+        <button class="btn btn-success " data-ng-click="lctrl.register = 0; lctrl.login = 1"><i
+                class="zmdi zmdi-arrow-right"></i> Login
+        </button>
+
+        <button class="btn btn-danger " data-ng-click="lctrl.register = 0; lctrl.forgot = 1"><i
+                class="zmdi zmdi-key"></i> Forgot My Password
+        </button>
+
     </ul>
+
+
 </div>
 
 <!-- Forgot Password -->
@@ -122,9 +146,21 @@
 
     <a href="" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
 
+    <!--<ul class="login-navigation">-->
+    <!--<li class="btn btn-default" data-ng-click="lctrl.forgot = 0; lctrl.login = 1">Login</li>-->
+    <!--<li class="btn btn-primary" data-ng-click="lctrl.forgot = 0; lctrl.register = 1">Register</li>-->
+    <!--</ul>-->
+
+
     <ul class="login-navigation">
-        <li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.forgot = 0; lctrl.login = 1">Login</li>
-        <li data-block="#l-register" class="bgm-red" data-ng-click="lctrl.forgot = 0; lctrl.register = 1">Register</li>
+        <button class="btn btn-success " data-ng-click="lctrl.forgot = 0; lctrl.login = 1"><i
+                class="zmdi zmdi-arrow-right"></i> Login
+        </button>
+
+        <button class="btn btn-primary " data-ng-click="lctrl.forgot = 0; lctrl.register = 1"><i
+                class="zmdi zmdi-account-add"></i> Register
+        </button>
+
     </ul>
 </div>
 
