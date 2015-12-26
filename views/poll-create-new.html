@@ -72,7 +72,7 @@
         </div>
 
 
-        <div class="col-sm-5 form-group">
+        <div class="col-sm-6 form-group">
             <div class="fg-line">
                 <div class="select">
 
@@ -80,14 +80,25 @@
 
                     <select class="form-control" data-ng-model="$root.model.pollQuestion.answerType" tabindex="4"
                             ng-options="types for (typeID, types) in $root.model.pollAnswerType">
-
                     </select>
 
                 </div>
             </div>
+
         </div>
 
-        <div class="col-sm-6 form-group fg-float">
+        <div class="col-sm-6 form-group"
+             ng-if="$root.model.pollQuestion.answerType == 'Number' || $root.model.pollQuestion.answerType == 'Text' || $root.model.pollQuestion.answerType == 'Currency'|| $root.model.pollQuestion.answerType == 'Percent'">
+
+            <div class="fg-line">
+                <label class="fg-label">Placeholder for answer type</label>
+                <input type="text" class="input-lg form-control fg-input"
+                       ng-model="$root.model.pollQuestion.placeHolder">
+            </div>
+
+        </div>
+
+        <div class="col-sm-11 form-group fg-float">
             <div class="fg-line">
                 <input type="text" class="input-lg form-control fg-input"
                        ng-model="$root.model.pollQuestionOption.body">
@@ -147,9 +158,9 @@
 
     </div>
 
-    <div class="pmbb-body p-l-30">
+    <div class="pmbb-body p-l-30" ng-repeat="(qId, questions) in pollQuestions">
         <div class="form-group">
-            <div class="fg-line" ng-repeat="(qId, questions) in pollQuestions">
+            <div class="fg-line">
 
                 <div class="pmbb-header col-sm-1">
                     <button class="btn btn-lg bgm-cyan pull-right" ng-click="removeQuestion(qId)"><i
@@ -157,51 +168,54 @@
                     </button>
                 </div>
 
-                <div class="pmbb-header col-sm-11">
-                    <blockquote class="m-b-25">
+                <blockquote class="m-b-25 col-sm-11">
 
-                        <dl class="dl-horizontal">
-                            <dt>Question Body</dt>
-                            <dd>{{ questions.body }}</dd>
-                        </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Question Body</dt>
+                        <dd>{{ questions.body }}</dd>
+                    </dl>
 
-                        <dl class="dl-horizontal">
-                            <dt>Answer Type</dt>
-                            <dd>{{ questions.answerType }}</dd>
-                        </dl>
+                    <br>
 
-                        <dl class="dl-horizontal">
-                            <dt>Options</dt>
-                            <dd ng-repeat="options in questions.option">{{ options.body }}</dd>
-                        </dl>
-
-                    </blockquote>
-                </div>
+                    <dl class="dl-horizontal">
+                        <dt>Options</dt>
+                        <dd>
+                            <poll-question-option-list option-body="options.body" option-type="questions.answerType"
+                                                       option-id="oId" question-id='qId'
+                                                       place-holder="questions.placeHolder" read-only="true"
+                                                       ng-repeat="(oId, options) in questions.option"></poll-question-option-list>
+                        </dd>
+                    </dl>
+                </blockquote>
             </div>
         </div>
+
     </div>
+
 </div>
 
 <div class="clearfix"></div>
 
 <div class="pmb-block" ng-if="pollQuestions.length > 0">
 
-    <div class="pmbb-header col-sm-4">
-        <h2>
-            <button class="btn btn-primary btn-lg " ng-click="submit()"> READY</button>
-        </h2>
-    </div>
+    <div class="pmbb-header">
 
-    <div class="pmbb-header col-sm-4" style="text-align:center">
-        <h2>
-            <button class="btn btn-primary btn-lg " ng-click="saveTemplate()"> SAVE & EXIT</button>
-        </h2>
-    </div>
+        <div class="col-sm-4">
+            <h2>
+                <button class="btn btn-primary btn-lg " ng-click="submit()"> READY</button>
+            </h2>
+        </div>
 
-    <div class="pmbb-header col-sm-4">
-        <h2>
-            <button class="btn btn-primary btn-lg pull-right" ng-click="clearForm()"> CANCEL</button>
-        </h2>
-    </div>
+        <div class="col-sm-4" style="text-align:center">
+            <h2>
+                <button class="btn btn-primary btn-lg " ng-click="saveTemplate()"> SAVE & EXIT</button>
+            </h2>
+        </div>
 
+        <div class="col-sm-4">
+            <h2>
+                <button class="btn btn-primary btn-lg pull-right" ng-click="clearForm()"> CANCEL</button>
+            </h2>
+        </div>
+    </div>
 </div>

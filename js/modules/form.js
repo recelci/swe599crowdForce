@@ -132,7 +132,9 @@ materialAdmin
                 optionBody: "=",
                 answerValue: "=specificAnswerValue",
                 questionId: "=",
-                optionId: "="
+                optionId: "=",
+                placeHolder: "=",
+                readOnly: "="
 
             },
             templateUrl: "template/poll-question-option-list-template.html",

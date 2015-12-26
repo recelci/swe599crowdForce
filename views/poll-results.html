@@ -1,4 +1,4 @@
-<div class="pmb-block">
+<div class="pmb-block" ng-if="isCurrentUserParticipated()">
 
 
     <div class="pmbb-header">
@@ -105,5 +105,11 @@
         </div>
 
     </div>
+
+</div>
+
+<div class="pmb-block" ng-if="!isCurrentUserParticipated()">
+
+    <h2> Results will be available as soon as you participate to the poll.</h2>
 
 </div>

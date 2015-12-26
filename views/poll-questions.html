@@ -21,8 +21,8 @@
                         <dt>Options</dt>
                         <dd>
                             <poll-question-option-list option-body="options.body" option-type="questions.answerType"
-                                                       option-id="oId" question-id='qId'
-                                                       specific-answer-value="$root.model.pollQuestionOption.value"
+                                                       option-id="oId" question-id='qId' place-holder = "questions.placeHolder"
+                                                       specific-answer-value="$root.model.pollQuestionOption.value" read-only = "isCurrentUserParticipated()"
                                                        ng-repeat="(oId, options) in questions.option"></poll-question-option-list>
                         </dd>
                     </dl>
@@ -36,7 +36,7 @@
 
 <div class="clearfix"></div>
 
-<div class="pmb-block">
+<div class="pmb-block" ng-if = "!isCurrentUserParticipated()">
 
     <div class="pmbb-header col-sm-4">
         <h2>

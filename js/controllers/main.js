@@ -38,6 +38,7 @@ materialAdmin
             pollQuestion: {
                 body: "",
                 answerType: "",
+                placeHolder: "",
                 option: []
             },
 
@@ -713,10 +714,13 @@ materialAdmin
                 pollQuestion.add({
                     body: $rootScope.model.pollQuestion.body,
                     answerType: $rootScope.model.pollQuestion.answerType,
+                    placeHolder: $rootScope.model.pollQuestion.placeHolder,
                     option: $scope.pollQuestionOptions.slice()
+
                 });
 
                 $rootScope.model.pollQuestion = {};
+
                 pollQuestionOption.clear();
 
             }
@@ -911,106 +915,113 @@ materialAdmin
 
             $scope.specificPoll.$loaded().then(function (loadedData) {
 
-                angular.forEach(loadedData.question, function (qValue, qKey) {
+                if (loadedData.readyToPublish) {
 
-                    angular.forEach(qValue.option, function (oValue, oKey) {
+                    angular.forEach(loadedData.question, function (qValue, qKey) {
 
-                        $scope.optionValueArray = [];
-                        $scope.specificPoll.question[qKey].result = [];
+                        angular.forEach(qValue.option, function (oValue, oKey) {
 
-                        angular.forEach(oValue.value, function (vValue, vKey) {
+                            $scope.optionValueArray = [];
+                            $scope.specificPoll.question[qKey].result = [];
 
+                            angular.forEach(oValue.value, function (vValue, vKey) {
+
+
+                                if (qValue.answerType == "Percent") {
+
+                                    $scope.optionValueArray.push(vValue * 100);
+
+                                } else if (qValue.answerType == "Time" || qValue.answerType == "Date") {
+
+                                    $scope.optionValueArray.push(Date.parse(vValue));
+
+                                } else {
+                                    $scope.optionValueArray.push(vValue);
+                                }
+
+
+                            });
 
                             if (qValue.answerType == "Percent") {
 
-                                $scope.optionValueArray.push(vValue * 100);
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
 
-                            } else if (qValue.answerType == "Time" || qValue.answerType == "Date") {
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
 
-                                $scope.optionValueArray.push(Date.parse(vValue));
+                            } else if (qValue.answerType == "Number") {
+
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+                            } else if (qValue.answerType == "Currency") {
+
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+
+                            } else if (qValue.answerType == "Radio") {
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
+
+                            } else if (qValue.answerType == "Multiple-Choice") {
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
+
+                            } else if (qValue.answerType == "Date") {
+
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toDateString();
+
+                            } else if (qValue.answerType == "Time") {
+
+                                $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+
+                                $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toTimeString();
 
                             } else {
-                                $scope.optionValueArray.push(vValue);
+                                /*alert("WHAT?")*/
                             }
 
+                            console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
 
                         });
 
-                        if (qValue.answerType == "Percent") {
 
-                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
+                        angular.forEach(qValue.option, function (oValue, oKey) {
 
-                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
+                            $scope.specificPoll.question[qKey].result.push({
+                                value: oValue.result,
+                                color: getRandomColor(),
+                                label: oValue.body
+                            })
 
-                        } else if (qValue.answerType == "Number") {
+                        });
 
-                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
-
-                        } else if (qValue.answerType == "Currency") {
-
-                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
-
-                        } else if (qValue.answerType == "Radio") {
-
-                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
-
-                        } else if (qValue.answerType == "Multiple-Choice") {
-
-                            $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionValueArray.length;
-
-                        } else if (qValue.answerType == "Date") {
-
-                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-                            $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toDateString();
-
-                        } else if (qValue.answerType == "Time") {
-
-                            $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
-
-                            $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toTimeString();
-
-                        } else {
-                            /*alert("WHAT?")*/
-                        }
-
-                        console.log($scope.optionAverage + " " + " *** " + $scope.optionValueArray);
 
                     });
 
-
-                    angular.forEach(qValue.option, function (oValue, oKey) {
-
-                        $scope.specificPoll.question[qKey].result.push({
-                            value: oValue.result,
-                            color: getRandomColor(),
-                            label: oValue.body
-                        })
-
-                    });
+                    /*console.log($scope.specificPoll.question[0].result[1].value);*/
 
 
-                });
+                    $scope.specificPollOwner = fireFactory.getUserData(loadedData.owner);
 
-                /*console.log($scope.specificPoll.question[0].result[1].value);*/
+                    /*$scope.specificPollOwner.$loaded().then(function (loadedData) {
 
-
-                $scope.specificPollOwner = fireFactory.getUserData(loadedData.owner);
-
-                /*$scope.specificPollOwner.$loaded().then(function (loadedData) {
-
-                    $scope.specificPollOwnerName = loadedData.userName;
+                     $scope.specificPollOwnerName = loadedData.userName;
 
 
 
-                });*/
+                     });*/
 
-                $state.go("pages.poll.poll-view-specific");
+                    $state.go("pages.poll.poll-view-specific.poll-questions");
 
+                }else{
+
+                    $scope.continueFromTemplate(pollId);
+
+                }
             });
 
         };
@@ -1091,6 +1102,16 @@ materialAdmin
                 }
                 return $rootScope.currentUserReference.currentUserData.data.participatedPolls[$scope.specificPollId];
             }
+
+        };
+
+        $scope.isParticipated = function (pollId) {
+
+                if (!$rootScope.currentUserReference.currentUserData.data.participatedPolls) {
+                    return false;
+                }
+                return $rootScope.currentUserReference.currentUserData.data.participatedPolls[pollId];
+
 
         }
 
