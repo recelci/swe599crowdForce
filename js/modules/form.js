@@ -140,7 +140,7 @@ materialAdmin
             templateUrl: "template/poll-question-option-list-template.html",
             link: function (scope, element, attrs) {
 
-
+                scope.answerValue = "";
 
                 scope.calculateResiduePercent = function (qId, oId) {
                     var sum = 0;

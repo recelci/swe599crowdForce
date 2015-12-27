@@ -662,6 +662,7 @@ materialAdmin
         $scope.getCurrentPolls();
 
         $scope.$watch('viewMyPolls', function (newVal, oldVal) {
+            $rootScope.searchTerm = '';
             $scope.getCurrentPolls();
         }, true);
 
