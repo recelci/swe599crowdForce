@@ -71,6 +71,12 @@ materialAdmin
             })
 
 
+            .state('pages.profile.profile-upload-picture', {
+                url: '/profile-upload-picture',
+                templateUrl: 'views/profile-upload-picture.html'
+            })
+
+
             // Polls
 
             .state('pages.poll', {

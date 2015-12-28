@@ -399,7 +399,6 @@ materialAdmin
 
                 $rootScope.currentUserReference.currentUserData.$save().then(function () {
 
-                    alert("Profile updated!");
 
                 });
 
@@ -411,7 +410,6 @@ materialAdmin
 
                 $rootScope.currentUserReference.currentUserData.$save().then(function () {
 
-                    alert("Profile updated!");
 
                 });
 
@@ -419,11 +417,11 @@ materialAdmin
 
             }
 
-            if (item === 'profileContact') {
+            if (item === 'profilePrivacy') {
                 this.editContact = 0;
             }
 
-            growlService.growl(message + ' has updated Successfully!', 'inverse');
+            growlService.growlSuccess('Your profile has updated successfully!');
         };
 
         this.cancel = function (item, message) {
@@ -434,19 +432,14 @@ materialAdmin
 
             if (item === 'profileInfo') {
 
-                /*$rootScope.currentUserReference.currentUserData = this.pristineState;*/
-
-                $rootScope.currentUserReference.currentUserData.$setPristine();
-
                 this.editInfo = 0;
 
             }
 
-            if (item === 'profileContact') {
+            if (item === 'profilePrivacy') {
                 this.editContact = 0;
             }
 
-            growlService.growl(message + ' has updated Successfully!', 'inverse');
         };
 
     })

@@ -1,0 +1,45 @@
+<div class="pmb-block">
+    <div class="pmbb-header">
+        <h2><i class="zmdi zmdi-image m-r-5"></i> Upload Photo</h2>
+
+    </div>
+
+
+    <div class="pmbb-body p-l-30">
+        <div flow-init="{singleFile:true}" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+             class="ng-scope" ng-controller="PictureUploadCtrl">
+            <dt class="p-t-10">
+                <a name="image-example" class="anchor" href="#image-example"><span
+                        class="octicon octicon-link"></span></a>Single Image upload
+            </dt>
+            <div class="thumbnail ng-hide col-sm-3" ng-show="!$flow.files.length">
+                <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="thumbnail col-sm-12" ng-show="$flow.files.length">
+                <img flow-img="$flow.files[0]">
+            </div>
+
+            <div>
+                <span class="btn btn-primary ng-hide" ng-show="!$flow.files.length"
+                      flow-btn="">Select image<input type="file" style="visibility: hidden; position: absolute;"></span>
+                <button class="btn btn-primary" ng-click="uploadImage()">Upload</button>
+
+                <span class="btn btn-info" ng-show="$flow.files.length" flow-btn="">Change
+                    <input type="file" style="visibility: hidden; position: absolute;"></span>
+
+                <span class="btn btn-danger" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</span>
+            </div>
+
+            <p>
+                Only PNG,GIF,JPG,JEPG files allowed.
+            </p>
+
+            <img ng-src="{{bigImage}}">
+
+            <img ng-src="{{smallImage}}">
+        </div>
+    </div>
+</div>

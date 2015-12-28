@@ -1,9 +1,7 @@
 <div class="container">
 
     <div class="block-header">
-        <h2>{{ mactrl.currentUserData.userName + " " + mactrl.currentUserData.userLastName}}
-            <small> {{ mactrl.currentUserData.role}}</small>
-        </h2>
+        <h2>{{ mactrl.currentUserData.userName + " " + mactrl.currentUserData.userLastName}} <small> {{ mactrl.currentUserData.role}}</small></h2>
 
         <ul class="actions m-t-20 hidden-xs">
             <li class="dropdown" dropdown>
@@ -28,91 +26,22 @@
 
     <div class="card" id="profile-main" data-ng-controller="profileCtrl as pctrl">
         <div class="pm-overview c-overflow">
+            <div class="pmo-pic">
+                <div class="p-relative">
+                    <a href="">
+                        <img class="img-responsive" src="{{mactrl.currentUserData.userImage}}">
+                    </a>
 
-            <div data-ng-controller="todoCtrl as tctrl">
-
-                <div class="tl-header">
-                    <h2>Profile Picture</h2>
-                    <small>You can upload another picture!</small>
+                    <a href="" data-ui-sref="pages.profile.profile-upload-picture" class="pmop-edit">
+                        <i class="zmdi zmdi-camera"></i> <span class="hidden-xs">Update Profile Picture</span>
+                    </a>
 
                 </div>
 
-                <div class="clearfix"></div>
 
-                <div class="tl-body">
-
-                    <div id="add-tl-item" class="pull-right" data-ng-class="{ 'toggled': tctrl.addTodoStat }"
-                         data-ng-click="tctrl.addTodoStat = true">
-
-                        <i class="add-new-item zmdi zmdi-camera" data-ng-click="tctrl.addTodo($event)"></i>
-
-                        <div class="add-tl-body">
-
-                            <div flow-init="{singleFile:true}"
-                                 flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
-                                 class="ng-scope" ng-controller="PictureUploadCtrl as pctrl">
-
-                                <div class="thumbnail ng-hide col-sm-2" ng-show="!$flow.files.length">
-                                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                </div>
-
-                                <div class="clearfix"></div>
-
-                                <div class="thumbnail col-sm-12" ng-show="$flow.files.length">
-                                    <img flow-img="$flow.files[0]">
-                                </div>
-
-                                <div>
-
-                                    <button class="btn btn-primary btn-sm " ng-if="$flow.files.length == 0"
-                                            flow-btn="">SELECT
-                                    </button>
-
-                                    <button class="btn btn-primary btn-sm " ng-if="$flow.files.length > 0"
-                                            ng-click="uploadImage()">UPLOAD
-                                    </button>
-
-                                    <button class="btn btn-info btn-sm " ng-if="$flow.files.length > 0"
-                                            flow-btn="">
-                                        CHANGE
-                                    </button>
-
-                                    <button class="btn btn-danger btn-sm " ng-if="$flow.files.length > 0"
-                                            ng-click="$flow.cancel()">REMOVE
-                                    </button>
-
-                                    <a class="zmdi zmdi-close" data-tl-action="dismiss"
-                                       data-ng-click="tctrl.addTodoStat = false; $event.stopPropagation()"></a>
-                                </div>
-
-                                <p>
-                                    Only PNG,GIF,JPG,JEPG files allowed.
-                                </p>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="checkbox media">
-
-                        <div class="pmo-pic">
-                            <div class="p-relative">
-
-                                <img class="img-responsive" src="{{mactrl.currentUserData.userImage}}">
-
-
-                            </div>
-
-                        </div>
-
-                        <div class="pmo-stat">
-                            <h2 class="m-0 c-white"> 25</h2>
-                            Poll Answered
-                        </div>
-
-                    </div>
-
+                <div class="pmo-stat">
+                    <h2 class="m-0 c-white"> 25</h2>
+                    Poll Answered
                 </div>
 
             </div>

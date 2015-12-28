@@ -22,7 +22,7 @@
 <div class="lc-block" id="l-login" ng-controller="LoginCtrl" data-ng-class="{ 'toggled': lctrl.login === 1 }"
      data-ng-if="lctrl.login === 1">
     <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
 
         <div class="fg-line">
             <input type="text" class="form-control" ng-model="$root.model.user.email" placeholder="e-mail">
@@ -30,7 +30,7 @@
     </div>
 
     <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+        <span class="input-group-addon"><i class="zmdi zmdi-lock"></i></span>
 
         <div class="fg-line">
             <input type="password" class="form-control" ng-model="$root.model.user.password" placeholder="Password">
@@ -94,7 +94,7 @@
     </div>
 
     <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+        <span class="input-group-addon"><i class="zmdi zmdi-lock"></i></span>
 
         <div class="fg-line">
             <input type="password" ng-model="$root.model.user.password" class="form-control" placeholder="Password">
