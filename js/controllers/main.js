@@ -678,6 +678,7 @@ materialAdmin
                     var tempTitle = value.title;
                     tempSearchTerm = angular.lowercase(tempSearchTerm);
                     tempDescription = angular.lowercase(tempDescription);
+                    tempTitle = angular.lowercase(tempTitle);
 
                     if (tempDescription.search(tempSearchTerm) > -1) {
 
