@@ -285,6 +285,53 @@ materialAdmin
             });
         };
 
+        gs.growlSuccess = function (message) {
+            $.growl({
+                message: message
+            }, {
+                type: 'success',
+                allow_dismiss: true,
+                label: 'Cancel',
+                className: 'btn-xs btn-inverse',
+                placement: {
+                    from: 'top',
+                    align: 'center'
+                },
+                delay: 2500,
+                animate: {
+                    enter: 'animated bounceInUp',
+                    exit: 'animated bounceOutUp'
+                },
+                offset: {
+                    x: 20,
+                    y: 85
+                }
+            });
+        };
+
+        gs.growlWarning = function (message) {
+            $.growl({
+                message: message
+            }, {
+                type: 'warning',
+                allow_dismiss: true,
+                label: 'Cancel',
+                className: 'btn-xs btn-inverse',
+                placement: {
+                    from: 'top',
+                    align: 'center'
+                },
+                animate: {
+                    enter: 'animated rotateIn',
+                    exit: 'animated rotateOut'
+                },
+                offset: {
+                    x: 20,
+                    y: 85
+                }
+            });
+        };
+
         return gs;
     })
 

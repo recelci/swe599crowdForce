@@ -64,9 +64,9 @@ materialAdmin
 
             authRoles: [
 
-                'Student',
-                'Faculty Member',
-                'All'
+                'Students',
+                'Faculty Members',
+                'Public'
             ]
 
 
@@ -462,7 +462,7 @@ materialAdmin
             $scope.fileReader.readAsDataURL(this.$flow.files[0].file);
             $scope.fileReader.onloadend = function () {
                 resizeService.resizeImage($scope.fileReader.result, {
-                    size: 100,
+                    size: 400,
                     sizeScale: 'ko',
                     otherOptions: '',
                     height: 256,
@@ -624,7 +624,7 @@ materialAdmin
     // POLL
     //=================================================
 
-    .controller('PollCtrl', function PollCtrl($scope, fireFactory, $rootScope, $state, pollQuestion, pollQuestionOption, currentPoll, $filter, $sce, ngTableParams, $location) {
+    .controller('PollCtrl', function PollCtrl($scope, fireFactory, $rootScope, $state, pollQuestion, pollQuestionOption, currentPoll, $filter, $sce, ngTableParams, $location, growlService) {
 
         $scope.pollQuestions = pollQuestion.list();
         $scope.pollQuestionOptions = pollQuestionOption.list();
@@ -747,6 +747,7 @@ materialAdmin
             }
 
 
+
         };
 
         $scope.addOption = function () {
@@ -771,18 +772,29 @@ materialAdmin
         $scope.submit = function () {
 
             if (!$rootScope.model.poll.title) {
-                alert("You need to enter a title for your poll!");
+                growlService.growlWarning('You need to enter a title for your poll!');
                 return;
             }
 
             if (!$rootScope.model.poll.description) {
-                alert("You need to enter a description for your poll!");
+                growlService.growlWarning('You need to enter a description for your poll!');
+                return;
+            }
+
+            if (!$rootScope.model.poll.endDate) {
+                growlService.growlWarning('You need to select an end date for your poll!');
                 return;
             }
 
             if (!$rootScope.model.poll.isOwnerPrivate) {
 
                 $rootScope.model.poll.isOwnerPrivate = false;
+
+            }
+
+            if (!$rootScope.model.poll.authRole) {
+
+                $rootScope.model.poll.authRole = 'Public';
 
             }
 
@@ -810,6 +822,8 @@ materialAdmin
 
             }
 
+            growlService.growlSuccess('Your poll is saved!');
+
             $scope.viewSpecificPoll(fireBaseObj.key());
         };
 
@@ -817,7 +831,7 @@ materialAdmin
 
             fireFactory.specificPollReference(pollId).remove(function (error) {
 
-                alert(error ? "Error occured!" : "Your poll is deleted!");
+                /*alert(error ? "Error occured!" : "Your poll is deleted!");*/
 
             });
 
@@ -877,8 +891,27 @@ materialAdmin
 
                 for (var j = 0, optionLength = $scope.specificPoll.question[i].option.length; j < optionLength; j++) {
 
-                    /*console.log(i + " " + j +" "+$rootScope.model.pollQuestionOption.value[i][j]);*/
+                    try {
+
+                        if($rootScope.model.pollQuestionOption.value[i][j]);
+
+                    }catch(err){
+
+                        growlService.growlWarning("Please fill at least one option in each question!");
+
+                        return;
+                    }
+
+                }
+            }
+
+
+            for (i = 0; i < questionLength; i++) {
+
+                for (j = 0; j < optionLength; j++) {
+
                     var pollJSON = angular.fromJson(angular.toJson($rootScope.model.pollQuestionOption.value[i][j]));
+
                     fireFactory.optionValueReference($scope.specificPollId, i, j).push(pollJSON);
 
                 }
@@ -889,6 +922,8 @@ materialAdmin
             $scope.userPollParticipateInteraction($scope.specificPollId);
 
             $scope.viewSpecificPoll($scope.specificPollId);
+
+            growlService.growlSuccess('Your vote is recorded anonymously!');
 
         };
 
@@ -927,6 +962,8 @@ materialAdmin
         };
 
         $scope.viewSpecificPoll = function (pollId) {
+
+            $rootScope.model.pollQuestionOption.value = {};
 
             $scope.specificPollId = pollId;
 
@@ -1009,22 +1046,49 @@ materialAdmin
 
                         });
 
+                        if (qValue.answerType == "Percent") {
 
-                        angular.forEach(qValue.option, function (oValue, oKey) {
+                            $scope.resultSum = 0;
 
-                            $scope.specificPoll.question[qKey].result.push({
-                                value: oValue.result,
-                                color: getRandomColor(),
-                                label: oValue.body
-                            })
+                            angular.forEach(qValue.option, function (oValue, oKey) {
 
-                        });
+                                $scope.resultSum = $scope.resultSum + oValue.result;
+
+                            });
+
+                            angular.forEach(qValue.option, function (oValue, oKey) {
+
+                                var normalizedResultForPercent = (oValue.result / $scope.resultSum) * 100;
+
+                                    $scope.specificPoll.question[qKey].result.push({
+                                    value: normalizedResultForPercent.toFixed(2),
+                                    color: getRandomColor(),
+                                    label: oValue.body
+                                })
+
+                            });
+
+
+                        }else{
+
+                            angular.forEach(qValue.option, function (oValue, oKey) {
+
+                                $scope.specificPoll.question[qKey].result.push({
+                                    value: oValue.result,
+                                    color: getRandomColor(),
+                                    label: oValue.body
+                                })
+
+                            });
+
+                        }
+
+
 
 
                     });
 
                     /*console.log($scope.specificPoll.question[0].result[1].value);*/
-
 
                     $scope.specificPollOwner = fireFactory.getUserData(loadedData.owner);
 
@@ -1050,6 +1114,8 @@ materialAdmin
         /*$scope.viewSpecificPoll($scope.pollMainPageView);*/
 
         $scope.continueFromTemplate = function (pollId) {
+
+            $rootScope.model.pollQuestionOption.value = {};
 
             $scope.isContinueFromTemplate = true;
 
@@ -1098,6 +1164,28 @@ materialAdmin
 
 
         };
+
+
+
+        $scope.viewRandomPoll = function () {
+
+            $scope.currentPolls.$loaded().then(function (loadedData) {
+
+                var pollArray = [];
+
+                angular.forEach(loadedData, function (value, key) {
+
+                    pollArray.push(key);
+
+                });
+
+                $scope.viewSpecificPoll(pollArray[pollArray.length-1]);
+
+            });
+
+        };
+
+        $scope.viewRandomPoll();
 
         $scope.calculateAverage = function (data) {
 
