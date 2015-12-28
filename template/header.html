@@ -1,5 +1,6 @@
 <ul class="header-inner">
-    <li id="menu-trigger" data-target="mainmenu" data-toggle-sidebar data-model-left="mactrl.sidebarToggle.left" data-ng-class="{ 'open': mactrl.sidebarToggle.left === true }">
+    <li id="menu-trigger" data-target="mainmenu" data-toggle-sidebar data-model-left="mactrl.sidebarToggle.left"
+        data-ng-class="{ 'open': mactrl.sidebarToggle.left === true }">
         <div class="line-wrap">
             <div class="line top"></div>
             <div class="line center"></div>
@@ -15,17 +16,23 @@
         <ul class="top-menu">
 
             <!--<li id="toggle-width">-->
-                <!--<div class="toggle-switch">-->
-                    <!--<input id="tw-switch" type="checkbox" hidden="hidden" data-change-layout="mactrl.layoutType">-->
-                    <!--<label for="tw-switch" class="ts-helper"></label>-->
-                <!--</div>-->
+            <!--<div class="toggle-switch">-->
+            <!--<input id="tw-switch" type="checkbox" hidden="hidden" data-change-layout="mactrl.layoutType">-->
+            <!--<label for="tw-switch" class="ts-helper"></label>-->
+            <!--</div>-->
             <!--</li>-->
 
             <li id="top-search">
                 <a class="tm-search" href="" data-ng-click="hctrl.openSearch()"></a>
             </li>
 
-            <li class="dropdown" dropdown>
+
+            <!--<li id="top-log-out">
+                <a class="tm-task" href="" data-ng-click="mactrl.logout()"></a>
+            </li>-->
+
+
+            <!--<li class="dropdown" dropdown>
                 <a dropdown-toggle class="tm-notification" href=""><i class="tmn-counts">1</i></a>
                 <div class="dropdown-menu dropdown-menu-lg stop-propagate pull-right">
                     <div class="listview" id="notifications">
@@ -60,7 +67,7 @@
                     </div>
 
                 </div>
-            </li>
+            </li>-->
 
         </ul>
     </li>

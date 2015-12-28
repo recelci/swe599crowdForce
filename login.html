@@ -24,18 +24,22 @@
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
 
-        <div class="fg-line">
+        <div class="fg-line" ng-class="{'has-error': isInError(emailErrorMessage)}">
             <input type="text" class="form-control" ng-model="$root.model.user.email" placeholder="e-mail">
         </div>
+
+
     </div>
+    <p class="help-block">{{emailErrorMessage}}</p>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-lock"></i></span>
 
-        <div class="fg-line">
+        <div class="fg-line" ng-class="{'has-error': isInError(passwordErrorMessage)}">
             <input type="password" class="form-control" ng-model="$root.model.user.password" placeholder="Password">
         </div>
     </div>
+    <p class="help-block">{{passwordErrorMessage}}</p>
 
     <div class="clearfix"></div>
 
@@ -88,18 +92,20 @@
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
 
-        <div class="fg-line">
+        <div class="fg-line" ng-class="{'has-error': isInError(emailErrorMessage)}">
             <input type="text" ng-model="$root.model.user.email" class="form-control" placeholder="Email Address">
         </div>
     </div>
+    <p class="help-block">{{emailErrorMessage}}</p>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-lock"></i></span>
 
-        <div class="fg-line">
+        <div class="fg-line" ng-class="{'has-error': isInError(passwordErrorMessage)}">
             <input type="password" ng-model="$root.model.user.password" class="form-control" placeholder="Password">
         </div>
     </div>
+    <p class="help-block">{{passwordErrorMessage}}</p>
 
     <div class="clearfix"></div>
 
