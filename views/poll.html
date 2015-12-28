@@ -52,11 +52,11 @@
                             </td>
 
                             <td data-title="'Created'" sortable="'createDate'" ng-click="viewSpecificPoll(pollID)">
-                                {{ poll.createDate }}
+                                {{ poll.createDate | date:'dd-MM-yyyy' }}
                             </td>
 
                             <td data-title="'Ends'" sortable="'endDate'" ng-click="viewSpecificPoll(pollID)">
-                                {{ poll.endDate }}
+                                {{ poll.endDate | date:'dd-MM-yyyy'}}
                             </td>
 
                             <td data-title="'Action'" sortable="'readyToPublish'">
@@ -92,169 +92,9 @@
                     <br>
                 </div>
 
-                <!--<div class="listview" id="notifications">
-
-                    <div class="lv-header">
-                        Polls
-
-                        <ul class="actions">
-                            <li>
-                                <a href="" data-ng-click="">
-                                    <i class="zmdi zmdi-check-all"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="lv-body">
-                        <a class="lv-item" ng-href="" ng-repeat="(pollID, poll) in currentPolls">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <ul class="actions pull-left">
-                                        <li class="dropdown" dropdown>
-                                            <a href="" dropdown-toggle>
-                                                <i class="zmdi zmdi-assignment-alert zmdi-hc-lg"
-                                                   ng-if="!poll.readyToPublish && viewMyPolls == 1"></i>
-                                                <i class="zmdi zmdi-assignment-check zmdi-hc-lg"
-                                                   ng-if="poll.readyToPublish && viewMyPolls == 1"></i>
-                                                <i class="zmdi zmdi-more-vert" ng-if="viewMyPolls == 0"></i>
-                                            </a>
-
-                                            <ul class="dropdown-menu dropdown-menu-right">
-                                                <li ng-click="continueFromTemplate(pollID)">
-                                                    <a href="">Template</a>
-                                                </li>
-                                                <li ng-click="removePollTemplate(pollID)"
-                                                    ng-if="!poll.readyToPublish && viewMyPolls == 1">
-                                                    <a href="">Delete</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="media-body">
-                                    <div class="lv-title">{{ poll.title }}</div>
-                                    <small class="lv-small">{{ poll.createDate }}</small>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>-->
-
-
-                <!--<div class="lv-item media" ng-repeat="(pollID, poll) in currentPolls" ng-click="viewSpecificPoll(pollID)" href="">
-
-                    <div class="pull-right">
-                        <ul class="actions pull-left">
-                            <li class="dropdown" dropdown>
-                                <a href="" dropdown-toggle>
-                                    <i class="zmdi zmdi-assignment-alert zmdi-hc-lg"
-                                       ng-if="!poll.readyToPublish && viewMyPolls == 1"></i>
-                                    <i class="zmdi zmdi-assignment-check zmdi-hc-lg"
-                                       ng-if="poll.readyToPublish && viewMyPolls == 1"></i>
-                                    <i class="zmdi zmdi-more-vert" ng-if="viewMyPolls == 0"></i>
-                                </a>
-
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li ng-click="continueFromTemplate(pollID)">
-                                        <a href="">Template</a>
-                                    </li>
-                                    <li ng-click="removePollTemplate(pollID)"
-                                        ng-if="!poll.readyToPublish && viewMyPolls == 1">
-                                        <a href="">Delete</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="media-body">
-
-
-                        <div class="col-sm-1">
-                            <i class="zmdi zmdi-notifications-none zmdi-hc-lg"
-                               ng-if="!isParticipated(pollID)"></i>
-                            <i class="zmdi zmdi-check-all zmdi-hc-lg"
-                               ng-if="isParticipated(pollID)"></i>
-                        </div>
-
-                        <div class="col-sm-11">
-
-                            <div class="lv-title">{{ poll.title }}</div>
-                            <small class="lv-small">{{ poll.createDate }}</small>
-
-                        </div>
-
-
-
-                    </div>
-
-                </div>-->
-
             </div>
 
             <div class="card-body" ng-if="$root.searchTerm.length > 0">
-                <!--<div class="table-responsive">
-                    <table ng-table="PollCtrl.tableSorting" class="table table-striped table-vmiddle">
-
-                        <tr ng-repeat="poll in currentPolls" ng-click="viewSpecificPoll(poll.pollID)">
-
-                            <td data-title="" sortable="'isParticipated'">
-
-                                <i class="zmdi zmdi-notifications-none zmdi-hc-lg"
-                                   ng-if="!isParticipated(poll.pollID)"></i>
-                                <i class="zmdi zmdi-check-all zmdi-hc-lg"
-                                   ng-if="isParticipated(poll.pollID)"></i>
-
-                            </td>
-
-                            <td data-title="'Title'" sortable="'title'">
-                                {{ poll.poll.title | limitTo: 25 }} {{poll.title.length > 25 ? '...' : ''}}
-                            </td>
-                            <td data-title="'Created'" sortable="'createDate'">
-                                {{ poll.poll.createDate }}
-                            </td>
-                            <td data-title="'Ends'" sortable="'endDate'">
-                                {{ poll.poll.endDate }}
-                            </td>
-
-                            &lt;!&ndash;<td data-title="'Stat'" sortable="'readyToPublish'" ng-if="viewMyPolls == 1">
-                                <i class="zmdi zmdi-assignment-alert zmdi-hc-lg" ng-if="!poll.poll.readyToPublish"></i>
-                                <i class="zmdi zmdi-assignment-check zmdi-hc-lg" ng-if="poll.poll.readyToPublish"></i>
-                                {{ poll.pollID }}
-                            </td>&ndash;&gt;
-
-                            <td data-title="'Action'" sortable="'readyToPublish'">
-
-                                <ul class="actions pull-right">
-                                    <li class="dropdown" dropdown>
-                                        <a href="" dropdown-toggle>
-                                            <i class="zmdi zmdi-assignment-alert zmdi-hc-lg"
-                                               ng-if="!poll.poll.readyToPublish && viewMyPolls == 1"></i>
-                                            <i class="zmdi zmdi-assignment-check zmdi-hc-lg"
-                                               ng-if="poll.poll.readyToPublish && viewMyPolls == 1"></i>
-                                            <i class="zmdi zmdi-more-vert" ng-if="viewMyPolls == 0"></i>
-                                        </a>
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li ng-click="continueFromTemplate(poll.pollID)">
-                                                <a href="">Template</a>
-                                            </li>
-                                            <li ng-click="removePollTemplate(poll.pollID)"
-                                                ng-if="!poll.poll.readyToPublish && viewMyPolls == 1">
-                                                <a href="">Delete</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-
-                            </td>
-
-                        </tr>
-                    </table>
-                </div>-->
-
-
 
                 <div class="table-responsive">
                     <table ng-table="PollCtrl.tableSorting" class="table table-striped table-vmiddle">
@@ -275,11 +115,11 @@
                             </td>
 
                             <td data-title="'Created'" sortable="'createDate'" ng-click="viewSpecificPoll(poll.pollID)">
-                                {{ poll.poll.createDate }}
+                                {{ poll.poll.createDate | date:'dd-MM-yyyy'}}
                             </td>
 
                             <td data-title="'Ends'" sortable="'endDate'" ng-click="viewSpecificPoll(poll.pollID)">
-                                {{ poll.poll.endDate }}
+                                {{ poll.poll.endDate | date:'dd-MM-yyyy'}}
                             </td>
 
                             <td data-title="'Action'" sortable="'readyToPublish'">
@@ -315,9 +155,6 @@
                     <br>
                 </div>
 
-
-
-
             </div>
 
         </div>
@@ -329,7 +166,7 @@
                 <div class="pmbb-header">
 
                     <div class="col-sm-10">
-                        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Poll Details</h2>
+                        <h2><i class="zmdi zmdi-assignment m-r-5"></i> Poll Details</h2>
                     </div>
 
                     <div class="col-sm-2" ng-if="!specificPoll.isOwnerPrivate">
@@ -372,7 +209,7 @@
 
                             <dl class="dl-horizontal">
                                 <dt>Create Date</dt>
-                                <dd>{{ specificPoll.createDate }}</dd>
+                                <dd>{{ specificPoll.createDate | date:'dd-MM-yyyy , EEE'}}</dd>
                             </dl>
 
                             <dl class="dl-horizontal">

@@ -1023,13 +1023,13 @@ materialAdmin
 
                                 $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
 
-                                $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toDateString();
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
 
                             } else if (qValue.answerType == "Time") {
 
                                 $scope.optionAverage = $scope.calculateAverage($scope.optionValueArray);
 
-                                $scope.specificPoll.question[qKey].option[oKey].result = new Date($scope.optionAverage).toTimeString();
+                                $scope.specificPoll.question[qKey].option[oKey].result = $scope.optionAverage;
 
                             } else {
                                 /*alert("WHAT?")*/

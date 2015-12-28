@@ -2,7 +2,7 @@
 
 
     <div class="pmbb-header">
-        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Questions</h2>
+        <h2><i class="zmdi zmdi-collection-text m-r-5"></i> Questions</h2>
 
     </div>
 
@@ -11,7 +11,10 @@
             <div class="fg-line">
                 <blockquote class="m-b-25">
 
-                    <p>{{ questions.body }}</p>
+                    <dl class="dl-horizontal">
+                        <dt>Question Body</dt>
+                        <dd>{{ questions.body }}</dd>
+                    </dl>
 
                     <div ng-if="questions.answerType == 'Percent'">
 
@@ -64,39 +67,43 @@
 
                     <div ng-if="questions.answerType == 'Date'">
 
-                        <div class="form-group fg-line" ng-repeat="(oId, options) in questions.option">
+                        <dl class="dl-horizontal">
+                            <dt>Options</dt>
+                            <div class="form-group fg-line" ng-repeat="(oId, options) in questions.option">
 
-                            <p>{{options.body}}</p>
-                            <p>{{options.result}}</p>
 
-                            <!--<div class="form-group fg-line">
+                                <dd><b> {{oId+1}}) </b>{{options.body}}</dd>
+                                <dd>{{options.result | date:'dd-MM-yyyy , EEE'}}</dd>
 
-                                <timepicker ng-model="options.result" minute-step="5"
-                                            show-meridian="false" default-value="00:00"></timepicker>
-
-                            </div>-->
-
-                        </div>
-
+                            </div>
+                        </dl>
                     </div>
 
                     <div ng-if="questions.answerType == 'Time'">
 
+                        <dl class="dl-horizontal">
+                            <dt>Options</dt>
+                            <div class="form-group fg-line" ng-repeat="(oId, options) in questions.option">
+
+
+                                <dd><b> {{oId+1}}) </b>{{options.body}}</dd>
+                                <dd>{{options.result | date:'H:mm'}}</dd>
+
+                            </div>
+                        </dl>
+
+                    </div>
+
+                    <!--<div ng-if="questions.answerType == 'Time'">
+
                         <div class="form-group fg-line" ng-repeat="(oId, options) in questions.option">
 
                             <p>{{options.body}}</p>
-                            <p>{{options.result}}</p>
-
-                            <!--<div class="form-group fg-line">
-
-                                <timepicker ng-model="options.result" minute-step="5"
-                                            show-meridian="false" default-value="00:00"></timepicker>
-
-                            </div>-->
+                            <p>{{options.result | date:'H:mm'}}</p>
 
                         </div>
 
-                    </div>
+                    </div>-->
 
                     <div class="clearfix"></div>
 
