@@ -544,6 +544,9 @@ materialAdmin
                 $rootScope.model.user.userName = $scope.getName($rootScope.model.user.email);
                 angular.copy($rootScope.model.user, createdUserData);
                 createdUserData.$save();
+                fireFactory.userCountReference().transaction(function (currentVal) {
+                    return (currentVal || 0) + 1;
+                });
                 console.log("Successfully created user account with uid:", userData.uid);
                 fireFactory.loginAndRedirect($rootScope.model.user, 'index.html', function () {
                     $scope.loading = false;
@@ -557,10 +560,6 @@ materialAdmin
                 password: $rootScope.model.user.password
             };
             fireFactory.firebaseRef().createUser(registerData, $scope.registerCB);
-
-            fireFactory.userCountReference().transaction(function (currentVal) {
-                return (currentVal || 0) + 1;
-            });
 
         };
         $scope.getName = function (authData) {
