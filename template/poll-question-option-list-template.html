@@ -89,8 +89,8 @@
 
             <div class="radio m-b-15">
                 <label>
-                    <input type="radio" name="radioType" value="true"
-                           ng-model="$parent.answerValue[questionId][optionId]" ng-disabled="readOnly">
+                    <input type="radio" ng-value="true" name="radio-options" id="radio-option-{{optionId}}" ng-click="changeRadioOptVal(questionId, optionId, optionIndex)"
+                           ng-model="$parent.answerValue[questionId][optionId]" ng-disabled="readOnly" >
                     <i class="input-helper"></i>
 
                     {{optionBody}}
@@ -106,7 +106,7 @@
 
             <div class="checkbox m-b-15">
                 <label>
-                    <input type="checkbox" value="true" ng-model="$parent.answerValue[questionId][optionId]"
+                    <input type="checkbox" ng-value="true" ng-model="$parent.answerValue[questionId][optionId]"
                            ng-disabled="readOnly">
                     <i class="input-helper"></i>
                     {{optionBody}}
@@ -130,3 +130,4 @@
     </div>
 
 </div>
+

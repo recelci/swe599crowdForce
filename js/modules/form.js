@@ -134,7 +134,8 @@ materialAdmin
                 questionId: "=",
                 optionId: "=",
                 placeHolder: "=",
-                readOnly: "="
+                readOnly: "=",
+                optionIndex: "="
 
             },
             templateUrl: "template/poll-question-option-list-template.html",
@@ -157,6 +158,18 @@ materialAdmin
                         scope.answerValue[qId][oId] = ((scope.answerValue[qId][oId]*100) - (sum - 100))/100;
 
                     }
+
+                };
+
+                scope.changeRadioOptVal = function (oId, qId, oIndex) {
+
+                    for (var i = 0; i < oIndex; i++) {
+
+                        scope.answerValue[oId][i] = false;
+
+                    }
+
+                    scope.answerValue[oId][qId] = true;
 
                 };
 

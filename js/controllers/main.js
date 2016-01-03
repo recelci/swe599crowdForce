@@ -1037,7 +1037,13 @@ materialAdmin
 
                                     $scope.optionValueArray.push(Date.parse(vValue));
 
-                                } else {
+                                } else if (qValue.answerType == "Radio" || qValue.answerType == "Multiple-Choice") {
+
+                                    if(vValue == true){
+                                        $scope.optionValueArray.push(vValue);
+                                    }
+
+                                }else {
                                     $scope.optionValueArray.push(vValue);
                                 }
 

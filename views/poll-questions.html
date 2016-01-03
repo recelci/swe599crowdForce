@@ -21,7 +21,7 @@
                         <dt>Options</dt>
                         <dd>
                             <poll-question-option-list option-body="options.body" option-type="questions.answerType"
-                                                       option-id="oId" question-id='qId' place-holder = "questions.placeHolder"
+                                                       option-id="oId" question-id='qId' option-index = "questions.option.length" place-holder = "questions.placeHolder"
                                                        specific-answer-value="$root.model.pollQuestionOption.value" read-only = "isCurrentUserParticipated()"
                                                        ng-repeat="(oId, options) in questions.option"></poll-question-option-list>
                         </dd>
